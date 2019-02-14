@@ -14,16 +14,20 @@ db = SQLAlchemy()
 # Model definitions
 
 class Employee(db.Model):
-    """Users of KidsAppBox's employee; stored in a database"""
+    """Employees of KidsAppBox; stored in a database"""
 
     __tablename__ = "employees"
 
     employee_id = db.Column(db.Integer,
+                            autoincrement=True,
                             primary_key=True)
+    emp_id = db.Column(db.Integer, nullable=False, unique=True)
     fname = db.Column(db.String(25))
     lname = db.Column(db.String(25))
     email = db.Column(db.String(64), nullable=True)
     password = db.Column(db.String(64), nullable=True)
+
+   
   
 
     def __repr__(self):
@@ -33,7 +37,7 @@ class Employee(db.Model):
  
 
 class Game(db.Model):
-	"""Games of KidsAppBox; stored in a database"""
+    """Games of KidsAppBox; stored in a database"""
 
     __tablename__ = "games"
 
@@ -43,7 +47,7 @@ class Game(db.Model):
     game_name = db.Column(db.String(100))
     game_description = db.Column(db.Text)
 
-
+  
     employees = db.relationship("Employee", secondary = "employee_games", backref = "games")
 
 
@@ -68,6 +72,7 @@ class EmployeeGame(db.Model):
     game_id = db.Column(db.Integer, 
                         db.ForeignKey("games.game_id"),
     	                nullable = False)
+
 
 
 
