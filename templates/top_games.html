@@ -17,11 +17,15 @@
 
 <input type="date"  name="date"required>
 <button id = "search">Search</button>
+
+
 </form>
 
-<!-- <h2>TOP TWENTY GAMES</h2>
+  
+  {% for r in json_record %}
 
 <table style="width:100%">
+
   <tr>
     <th>Rank</th>
     <th>App Id</th> 
@@ -31,36 +35,16 @@
   </tr>
 
   <tr>
-    <td>{{rank}} id ="rank"</td>
-    <td><a href="/details_of_games/{{app_id}}"></a></td>
-    <td>{{app_name}} id = "appName</td>
-    <td>{{avg_rating}} id="avrRating"</td>
-    <td>{{price}} id="price"</td>
+    <td>{{r["rank"]}}</td>
+    <td><a href="/details_of_games/{{country}}/{{store}}/{{r['app_id']}}">{{r["app_id"]}}</a></td>
+    <td>{{r["app_name"]}}</td>
+    <td>{{r["avg_rating"]}}</td>
+    <td>{{r["price"]}}</td>
   </tr>
+
 </table>
+ {% endfor %}
 
-</body>
-</html> -->
-
-
-<ul>
-  {% for r in json_record %}
-
- <!-- <li> {{r["rank_list"]}}</li> -->
-   
-    <li>{{r}}</li>
-  {% endfor %}
-
-</ul>
-<!-- 
-<p>{{rank}}
-<p> {{price}} </p>
-<p>{{json_record}}</p>
-<p>{{app_name}}</p>
-<p>{{games}}</p>
-<a href="/details_of_games/{{app_id}}">
-<p>{{app_id}}
-	</a> -->
 
 
 

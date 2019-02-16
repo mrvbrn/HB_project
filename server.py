@@ -92,19 +92,20 @@ def register_process():
 
     if employee_update and employee_update.fname == None:
 
+        """add the employee to the database"""
+
         employee_update.fname = fname
         employee_update.lname = lname
         employee_update.email = email
         employee_update.password = password
 
-        # new_employee = Employee(emp_id=emp_id, fname=fname, lname=lname, email=email, password=password)
         flash(f" Employee {email} added.")
        
         db.session.commit()
 
     
     
-        # return redirect("/")
+        return redirect("/")
     elif employee_update and employee_update.fname != None:
         flash(f" You are  already registered.")
         return redirect("/")
@@ -113,7 +114,7 @@ def register_process():
         flash(f" You are not employee.")
         return redirect("/")
 
-        """Add user information to the session"""
+        """Add employee information to the session"""
         
     session["fname"] = employee_update.fname
     session["lname"] = employee_update.lname
@@ -130,12 +131,11 @@ def employee_list():
 
 @app.route("/employees/<int:employee_id>")
 def user_detail(employee_id):
+
     """Show info about employee."""
 
     employee= Employee.query.get(employee_id)
     return render_template("employee.html", employee=employee)
-
-    """Show top twenty games"""
 
 
 
@@ -169,42 +169,19 @@ def top_games_process():
                             params=req_params,
                             headers=headers,
                             stream=True)
-    # import pdb; pdb.set_trace()
 
-    # print (response.json())
-
-    # games = []
+    games = []
    
-    # for line in response.iter_lines():
-    #     """Load json object and print it out"""
-    #     game_dict = json.loads(line)
-
-    #     print(game_dict)
-        # games.append(game_dict)
+    for line in response.iter_lines():
+        """Load json object and print it out"""
+        game_dict = json.loads(line)
+        games.append(game_dict)
 
 
-        # print(games)
-
-        # games_list = []
-
-        # for r in json_record:
-        #     print (r)
-
-
-
-        # print (json_record)
-
-        # responses=response.iter_lines()
-
-        
-        # avg_rating = (json_record["avg_rating"]) 
-        # rank = (json_record["rank"])
-        # app_id = (json_record["app_id"])
-        # price = (game_dict["price"])
-        # app_name = (json_record["app_name"])
+        print(games)
   
 
-    return render_template("top_games.html", json_record=response.iter_lines())
+    return render_template("top_games.html", json_record=games, store=store, country=country_code)          
                                              
 
 
@@ -217,16 +194,16 @@ def kidsappbox_game(game_name):
        
 
 
-@app.route("/details_of_games", methods = ['GET', 'POST'])
-def details_of_games(app_id):
+@app.route("/details_of_games/<string:country>/<string:store>/<string:app_id>", methods = ['GET', 'POST'])
+def details_of_games(country, store, app_id):
 
-    """Show details of top ten games"""
+    """Show details of top twenty games"""
 
-    store =request.args["store"]                 # "android"       # Could be either "android" or "itunes".
-    country_code = request.args["country_code"]                              #"US"     # Two letter country code.
-    app_id = request.args["app_id"]              #"com.facebook.orca" # Unique app identifier (bundle ID).
+    # store =                                     #request.args["store"]                 # "android"   # Could be either "android" or "itunes".
+    # country_code = request.args["country_code"]  #"US"     # Two letter country code.
+               #"com.facebook.orca" # Unique app identifier (bundle ID).
 
-    req_params = {"country": country_code}
+    req_params = {"country": country}
 
     # Request URL
     url = "https://api.appmonsta.com/v1/stores/%s/details/%s.json" % (store, app_id)
@@ -242,11 +219,14 @@ def details_of_games(app_id):
                             stream=True)
 
     print (response.status_code)
+
+    games=[]
     for line in response.iter_lines():
     # Load json object and print it out
        json_record = json.loads(line)
-       print (json_record)
-    return render_template("details_of_games.html", description=description)
+       print(json_record)
+       games.append(json_record)
+    return render_template("details_of_games.html", json_record=games)
 
 if __name__ == "__main__":
     app.debug = True
