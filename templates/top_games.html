@@ -5,6 +5,79 @@
 <h1>top twenty games</h1>
 
 
+  <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+<form action="/top_twenty_games" method ="POST" id = "search_game">
+
+<select name="store">
+  <option value="android" id = "select-store">android</option>
+  <option value="itunes" id = "select-store">itunes</option>
+</select>
+
+<label for="start">Start date:</label>
+
+<input type="date"  name="date"required>
+<button id = "search">Search</button>
+</form>
+
+<!-- <h2>TOP TWENTY GAMES</h2>
+
+<table style="width:100%">
+  <tr>
+    <th>Rank</th>
+    <th>App Id</th> 
+    <th>App Name</th>
+    <th>Average Rating</th>
+    <th>Price</th> 
+  </tr>
+
+  <tr>
+    <td>{{rank}} id ="rank"</td>
+    <td><a href="/details_of_games/{{app_id}}"></a></td>
+    <td>{{app_name}} id = "appName</td>
+    <td>{{avg_rating}} id="avrRating"</td>
+    <td>{{price}} id="price"</td>
+  </tr>
+</table>
+
+</body>
+</html> -->
+
+
+<ul>
+  {% for r in json_record %}
+
+ <!-- <li> {{r["rank_list"]}}</li> -->
+   
+    <li>{{r}}</li>
+  {% endfor %}
+
+</ul>
+<!-- 
+<p>{{rank}}
+<p> {{price}} </p>
+<p>{{json_record}}</p>
+<p>{{app_name}}</p>
+<p>{{games}}</p>
+<a href="/details_of_games/{{app_id}}">
+<p>{{app_id}}
+	</a> -->
+
+
+
+
+
+<!-- <button id='getInfo'>Get Information!</button>
+<p>
+  <ul>
+    <li><b>App_name: <span id='app_name'>Unknown</span></li>
+    <li>Avr_rating: <span id='avr_rating'>Unknown</span></li>
+    <li>price: <span id='price'>Unknown</span></li>
+    <li>country: <span id='country'>Unknown</span></li>
+  </ul>
+</p>
+
+<script src="http://code.jquery.com/jquery.js"></script>
+<script type="text/javascript" src="/static/top-games.js"></script> -->
 
 
 {% endblock %}

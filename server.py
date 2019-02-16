@@ -27,6 +27,13 @@ def homepage():
     return render_template("homepage.html")
 
 
+@app.route('/login', methods=['GET'])
+def login_form():
+    """Show login form."""
+
+    return render_template("login_form.html")
+
+
 
 @app.route("/", methods=['POST'])
 def login_process():
@@ -52,6 +59,14 @@ def login_process():
     flash("You are successfully log in")
     return redirect(f"/employees/{employee.employee_id}")
 
+# @app.route("/logout")
+# dister_foef register_form():
+#     """Show register form for employees signup"""
+
+#     return render_template("regrm.html")
+
+
+
 
 @app.route("/register", methods=['GET'])
 def register_form():
@@ -69,78 +84,169 @@ def register_process():
     lname = request.form["lname"]
     email = request.form["email"]
     password = request.form["password"]
+   
 
     
 
-    if Employee.query.filter(Employee.emp_id == emp_id).first():
+    employee_update = Employee.query.filter(Employee.emp_id == emp_id).first()
 
-        new_employee = Employee(emp_id=emp_id, fname=fname, lname=lname, email=email, password=password)
+    if employee_update and employee_update.fname == None:
+
+        employee_update.fname = fname
+        employee_update.lname = lname
+        employee_update.email = email
+        employee_update.password = password
+
+        # new_employee = Employee(emp_id=emp_id, fname=fname, lname=lname, email=email, password=password)
         flash(f" Employee {email} added.")
-        db.session.add(new_employee)
+       
+        db.session.commit()
+
     
     
+        # return redirect("/")
+    elif employee_update and employee_update.fname != None:
+        flash(f" You are  already registered.")
         return redirect("/")
+
     else:
         flash(f" You are not employee.")
         return redirect("/")
-    db.session.commit()
 
-# @app.route('/login', methods=['GET'])
-# def login_form():
-#     """Show login form."""
+        """Add user information to the session"""
+        
+    session["fname"] = employee_update.fname
+    session["lname"] = employee_update.lname
+    session["email"] = employee_update.email
 
-#     return render_template("login_form.html")
 
-# @app.route("/employee/<employee_id>")
-# def employee_detail(employee_id):
-#     """Show info about user."""
 
-#     user = Employee.query.get(employee_id)
-#     return render_template("employee.html", employee=employee)
+@app.route("/employees")
+def employee_list():
+
+    employees = Employee.query.all()
+
+    return render_template("employee.html", employees = employees)
+
+@app.route("/employees/<int:employee_id>")
+def user_detail(employee_id):
+    """Show info about employee."""
+
+    employee= Employee.query.get(employee_id)
+    return render_template("employee.html", employee=employee)
+
+    """Show top twenty games"""
+
 
 
 
 
 @app.route("/top_twenty_games")
 def top_games():
+
+    return render_template("top_games.html")
+
+
+
+
+@app.route("/top_twenty_games", methods = ['POST'])
+def top_games_process():
     """Show top twenty games"""
 
-store = "android"        #register_form["store"]
-country_code = "US"           #register_form["country_code"]
-date = "2019-02-12"                   #register_form["date"]
+    store = request.form["store"]
+    country_code = "US"                    #request.form["country_code"]
+    date = request.form["date"]
 
-req_params = {"date" : date,
+    req_params = {"date" : date,
                   "country" : country_code}
 
-request_url = request_url = "https://api.appmonsta.com/v1/stores/%s/rankings.json" % store
-headers = {'Accept-Encoding': 'deflate, gzip'}
+    request_url = request_url = "https://api.appmonsta.com/v1/stores/%s/rankings.json" % store
+    headers = {'Accept-Encoding': 'deflate, gzip'}
 
-# Python Main Code Sample
-response = requests.get(request_url,
-                        auth=(username, password),
-                        params=req_params,
-                        headers=headers,
-                        stream=True)
+    # Python Main Code Sample
+    response = requests.get(request_url,
+                            auth=(username, password),
+                            params=req_params,
+                            headers=headers,
+                            stream=True)
+    # import pdb; pdb.set_trace()
 
-print (response.status_code)
-for line in response.iter_lines():
-  # Load json object and print it out
-  json_record = json.loads(line)
-  print (json_record)
-	# return render_template("top_games.html")
+    # print (response.json())
 
-@app.route("/kidsappbpox_game")
+    # games = []
+   
+    # for line in response.iter_lines():
+    #     """Load json object and print it out"""
+    #     game_dict = json.loads(line)
+
+    #     print(game_dict)
+        # games.append(game_dict)
+
+
+        # print(games)
+
+        # games_list = []
+
+        # for r in json_record:
+        #     print (r)
+
+
+
+        # print (json_record)
+
+        # responses=response.iter_lines()
+
+        
+        # avg_rating = (json_record["avg_rating"]) 
+        # rank = (json_record["rank"])
+        # app_id = (json_record["app_id"])
+        # price = (game_dict["price"])
+        # app_name = (json_record["app_name"])
+  
+
+    return render_template("top_games.html", json_record=response.iter_lines())
+                                             
+
+
+@app.route("/kidsappbox_game")
 def kidsappbox_game(game_name):
 	"""Show kidsappbox games"""
 
-	return render_template(kidsappbox_game.html)
+	return render_template("kidsappbox_game.html")
 
-@app.route("/details_of_games")
-def details_of_games(game_name):
-	"""Show details of top ten games"""
+       
 
-	return render_template(details_of_games.html)
 
+@app.route("/details_of_games", methods = ['GET', 'POST'])
+def details_of_games(app_id):
+
+    """Show details of top ten games"""
+
+    store =request.args["store"]                 # "android"       # Could be either "android" or "itunes".
+    country_code = request.args["country_code"]                              #"US"     # Two letter country code.
+    app_id = request.args["app_id"]              #"com.facebook.orca" # Unique app identifier (bundle ID).
+
+    req_params = {"country": country_code}
+
+    # Request URL
+    url = "https://api.appmonsta.com/v1/stores/%s/details/%s.json" % (store, app_id)
+
+    # This header turns on compression to reduce the bandwidth usage and transfer time.
+    headers = {'Accept-Encoding': 'deflate, gzip'}
+
+    # Python Main Code Sample
+    response = requests.get(url,
+                            auth=(username, password),
+                            params=req_params,
+                            headers=headers,
+                            stream=True)
+
+    print (response.status_code)
+    for line in response.iter_lines():
+    # Load json object and print it out
+       json_record = json.loads(line)
+       print (json_record)
+    return render_template("details_of_games.html", description=description)
 
 if __name__ == "__main__":
     app.debug = True
