@@ -45,7 +45,7 @@ class Game(db.Model):
                         autoincrement=True,
                         primary_key=True)
     game_name = db.Column(db.String(100))
-    game_description = db.Column(db.Text)
+    app_id = db.Column(db.String(100))
 
   
     employees = db.relationship("Employee", secondary = "employee_games", backref = "games")
@@ -54,7 +54,7 @@ class Game(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return f"<Game user_id={self.game_id} fname={self.game_name} lname={self.game_description}>"
+        return f"<Game user_id={self.game_id} gname={self.game_name} app_id={self.app_id}>"
 
 class EmployeeGame(db.Model):
     """ Association table between Employee and Game"""

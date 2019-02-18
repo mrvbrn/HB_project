@@ -4,6 +4,7 @@ import json
 from flask import Flask, render_template, request, flash, redirect, session
 from model import connect_to_db, db, Employee, Game, EmployeeGame
 from flask_debugtoolbar import DebugToolbarExtension
+from validate_email import validate_email
 
 
 
@@ -31,11 +32,11 @@ def homepage():
 def login_form():
     """Show login form."""
 
-    return render_template("login_form.html")
+    return render_template("login.html")
 
 
 
-@app.route("/", methods=['POST'])
+@app.route("/login", methods=['POST'])
 def login_process():
     """Process login."""
 
@@ -52,18 +53,20 @@ def login_process():
 
     if employee.password != password:
         flash("Incorrect password")
-        return redirect("/")
+        return redirect("/login")
 
     session["employee_id"] = employee.employee_id
 
     flash("You are successfully log in")
     return redirect(f"/employees/{employee.employee_id}")
 
-# @app.route("/logout")
-# dister_foef register_form():
-#     """Show register form for employees signup"""
+@app.route("/logout")
+def log_out():
+    """log out of employee's account"""
 
-#     return render_template("regrm.html")
+    session.clear()
+
+    return render_template("log_out.html")
 
 
 
@@ -84,35 +87,47 @@ def register_process():
     lname = request.form["lname"]
     email = request.form["email"]
     password = request.form["password"]
+    confirm_password = request.form["confirm_password"]
+
+
    
 
     
 
     employee_update = Employee.query.filter(Employee.emp_id == emp_id).first()
 
-    if employee_update and employee_update.fname == None:
 
-        """add the employee to the database"""
+    if password == confirm_password:
 
-        employee_update.fname = fname
-        employee_update.lname = lname
-        employee_update.email = email
-        employee_update.password = password
+        if employee_update and employee_update.fname == None:
 
-        flash(f" Employee {email} added.")
-       
-        db.session.commit()
+            """add the employee to the database"""
 
+            employee_update.fname = fname
+            employee_update.lname = lname
+            employee_update.email = email
+            employee_update.password = password
+
+            flash(f" Employee {email} added.")
+           
+            db.session.commit()
+
+
+
+            return redirect("/")
+        elif employee_update and employee_update.fname != None:
+            flash(f" You are  already registered.")
+            return redirect("/")
+
+        else:
+            flash(f" You are not employee.")
+            return redirect("/")
     
-    
-        return redirect("/")
-    elif employee_update and employee_update.fname != None:
-        flash(f" You are  already registered.")
-        return redirect("/")
-
     else:
-        flash(f" You are not employee.")
-        return redirect("/")
+
+        flash(f" Password does not match.")
+        return redirect("/register")
+
 
         """Add employee information to the session"""
         
@@ -122,19 +137,22 @@ def register_process():
 
 
 
-@app.route("/employees")
-def employee_list():
 
-    employees = Employee.query.all()
 
-    return render_template("employee.html", employees = employees)
+# @app.route("/employees")
+# def employee_list():
+
+#     employees = Employee.query.all()
+
+#     return render_template("employee_list.html", employees = employees)
 
 @app.route("/employees/<int:employee_id>")
-def user_detail(employee_id):
+def employee_detail(employee_id):
 
     """Show info about employee."""
-
+   
     employee= Employee.query.get(employee_id)
+  
     return render_template("employee.html", employee=employee)
 
 
@@ -154,7 +172,7 @@ def top_games_process():
     """Show top twenty games"""
 
     store = request.form["store"]
-    country_code = "US"                    #request.form["country_code"]
+    country_code = request.form["country"]
     date = request.form["date"]
 
     req_params = {"date" : date,
@@ -187,9 +205,16 @@ def top_games_process():
 
 @app.route("/kidsappbox_game")
 def kidsappbox_game(game_name):
-	"""Show kidsappbox games"""
+	
 
 	return render_template("kidsappbox_game.html")
+
+
+@app.route("/kidsappbox_game", methods=['POST'])
+def kidsappbox_game_process(game_name):
+    """Show kidsappbox game information"""
+
+    return render_template("kidsappbox_game.html")
 
        
 
@@ -198,11 +223,6 @@ def kidsappbox_game(game_name):
 def details_of_games(country, store, app_id):
 
     """Show details of top twenty games"""
-
-    # store =                                     #request.args["store"]                 # "android"   # Could be either "android" or "itunes".
-    # country_code = request.args["country_code"]  #"US"     # Two letter country code.
-               #"com.facebook.orca" # Unique app identifier (bundle ID).
-
     req_params = {"country": country}
 
     # Request URL
@@ -218,7 +238,7 @@ def details_of_games(country, store, app_id):
                             headers=headers,
                             stream=True)
 
-    print (response.status_code)
+    # print (response.status_code)
 
     games=[]
     for line in response.iter_lines():

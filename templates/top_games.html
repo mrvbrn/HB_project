@@ -9,14 +9,36 @@
 <form action="/top_twenty_games" method ="POST" id = "search_game">
 
 <select name="store">
-  <option value="android" id = "select-store">android</option>
-  <option value="itunes" id = "select-store">itunes</option>
+  <option value="android" id = "select-store">Android</option>
+  <option value="itunes" id = "select-store">iOS</option>
 </select>
+<select name="country">
+	 <option value="AU" id = "select-country">Australia</option>
+	 <option value="CAN" id = "select-country">Canada</option>
+	 <option value="CHN" id = "select-country">Chinese</option>
+	 <option value="FR" id = "select-country">France</option>
+	 <option value="DE" id = "select-country">Germany</option>
+	 <option value="GB" id = "select-country">United Kingdom</option>
+	 <option value="US" id = "select-country">United State</option>
+</select>
+
+
+<!-- <div class="dropdown">
+  <button onclick="myFunction()" class="dropbtn">Select Country</button>
+  <div id="myDropdown" class="dropdown-content">
+    <option value="AU">UNITED STATE</option>
+    <a href="#">United state</a>
+    <a href="#contact">Contact</a>
+  </div>
+</div>
+ -->
+
+
 
 <label for="start">Start date:</label>
 
 <input type="date"  name="date"required>
-<button id = "search">Search</button>
+<button id ="search">Search</button>
 
 
 </form>
@@ -58,10 +80,10 @@
     <li>price: <span id='price'>Unknown</span></li>
     <li>country: <span id='country'>Unknown</span></li>
   </ul>
-</p>
+</p> -->
 
-<script src="http://code.jquery.com/jquery.js"></script>
-<script type="text/javascript" src="/static/top-games.js"></script> -->
+<!-- <script src="http://code.jquery.com/jquery.js"></script>
+<script type="text/javascript" src="/static/js/top_games.js"></script> -->
 
 
 {% endblock %}
