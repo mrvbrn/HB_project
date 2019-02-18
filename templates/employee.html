@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+
+  <h1>Welcome {{employee.fname}}!</h1>
+  <h2>What do you want to do?</h2><br><br>
+
+<!-- <h2>Search top twenty games:</h2> -->
+<p><a href="/top_twenty_games">Search top twenty games</a></p>
+
+<!-- <h2>See details of any games</h2> -->
+<p><a href="/details_of_any_games">See details of any games</a></p>
+
+<!-- <h2>See details of your KidsAppBox's game</h2> -->
+<p><a href="/kidsappbpox_game">See details of your KidsAppBox's game</a></p>
+
+{% endblock %}
