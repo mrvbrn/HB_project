@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form action="/details_any_games" method ="POST" id = "d_any_games">
+
+<select name="store">
+  <option value="android" id = "select-store">Android</option>
+  <option value="itunes" id = "select-store">iOS</option>
+</select>
+<select name="country">
+	 <option value="AU" id = "select-country">Australia</option>
+	 <option value="CAN" id = "select-country">Canada</option>
+	 <option value="CHN" id = "select-country">Chinese</option>
+	 <option value="FR" id = "select-country">France</option>
+	 <option value="DE" id = "select-country">Germany</option>
+	 <option value="GB" id = "select-country">United Kingdom</option>
+	 <option value="US" id = "select-country">United State</option>
+</select><br><br>
+    please enter app id.
+    <input type="text" name="app_id" required>
+	<input type="submit" value="Search">
+
+
+{% endblock %}

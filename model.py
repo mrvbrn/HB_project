@@ -19,9 +19,7 @@ class Employee(db.Model):
     __tablename__ = "employees"
 
     employee_id = db.Column(db.Integer,
-                            autoincrement=True,
-                            primary_key=True)
-    emp_id = db.Column(db.Integer, nullable=False, unique=True)
+                       primary_key=True)
     fname = db.Column(db.String(25))
     lname = db.Column(db.String(25))
     email = db.Column(db.String(64), nullable=True)
@@ -33,7 +31,7 @@ class Employee(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return f"<Employee user_id={self.employee_id} fname={self.fname} lname={self.lname} email={self.email}>"
+        return f"<Employee employee_id={self.employee_id} fname={self.fname} lname={self.lname} email={self.email}>"
  
 
 class Game(db.Model):
@@ -46,6 +44,7 @@ class Game(db.Model):
                         primary_key=True)
     game_name = db.Column(db.String(100))
     app_id = db.Column(db.String(100))
+    store = db.Column(db.String(20))
 
   
     employees = db.relationship("Employee", secondary = "employee_games", backref = "games")
@@ -54,7 +53,7 @@ class Game(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return f"<Game user_id={self.game_id} gname={self.game_name} app_id={self.app_id}>"
+        return f"<Game game_id={self.game_id} gname={self.game_name} app_id={self.app_id} store={self.store}>"
 
 class EmployeeGame(db.Model):
     """ Association table between Employee and Game"""

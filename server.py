@@ -4,7 +4,7 @@ import json
 from flask import Flask, render_template, request, flash, redirect, session
 from model import connect_to_db, db, Employee, Game, EmployeeGame
 from flask_debugtoolbar import DebugToolbarExtension
-from validate_email import validate_email
+
 
 
 
@@ -82,7 +82,7 @@ def register_form():
 def register_process():
     """Process registration"""
 
-    emp_id = request.form["emp_id"]
+    employee_id = request.form["employee_id"]
     fname = request.form["fname"]
     lname = request.form["lname"]
     email = request.form["email"]
@@ -94,12 +94,12 @@ def register_process():
 
     
 
-    employee_update = Employee.query.filter(Employee.emp_id == emp_id).first()
+    employee_update = Employee.query.filter(Employee.employee_id == employee_id).first()
 
 
     if password == confirm_password:
 
-        if employee_update and employee_update.fname == None:
+        if employee_update and employee_update.fname == "null":
 
             """add the employee to the database"""
 
@@ -114,10 +114,10 @@ def register_process():
 
 
 
-            return redirect("/")
+            return redirect("/login")
         elif employee_update and employee_update.fname != None:
             flash(f" You are  already registered.")
-            return redirect("/")
+            return redirect("/login")
 
         else:
             flash(f" You are not employee.")
@@ -241,12 +241,67 @@ def details_of_games(country, store, app_id):
     # print (response.status_code)
 
     games=[]
+
+
     for line in response.iter_lines():
     # Load json object and print it out
        json_record = json.loads(line)
        print(json_record)
        games.append(json_record)
     return render_template("details_of_games.html", json_record=games)
+
+
+@app.route("/details_any_games", methods = ['GET'])
+def details_any_games():
+    """Show the form"""
+
+    return render_template("details_any_games.html")
+
+@app.route("/details_any_games/<string:country>/<string:store>/<string:app_id>", methods = ['POST'])
+def details_any_games_process():
+
+    """show details of any game"""
+
+    counrty = request.form["country"]
+    store = request.form["store"]
+    app_id = request.args["app_id"]
+
+
+    req_params = {"country": country}
+
+    # Request URL
+    url = "https://api.appmonsta.com/v1/stores/%s/details/%s.json" % (store, app_id)
+
+    # This header turns on compression to reduce the bandwidth usage and transfer time.
+    headers = {'Accept-Encoding': 'deflate, gzip'}
+
+    # Python Main Code Sample
+    response = requests.get(url,
+                            auth=(username, password),
+                            params=req_params,
+                            headers=headers,
+                            stream=True)
+
+    # print (response.status_code)
+
+    games=[]
+
+
+    for line in response.iter_lines():
+    # Load json object and print it out
+       json_record = json.loads(line)
+       print(json_record)
+       games.append(json_record)
+    return render_template("any_games.html", json_record=games)
+
+
+
+
+
+
+    return render_template("details_any_games.html")
+
+
 
 if __name__ == "__main__":
     app.debug = True
