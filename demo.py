@@ -3,25 +3,24 @@ import requests
 import json
 import os
 # Request Parameters
-store = "android"       # Could be either "android" or "itunes".
+store = "itunes"       # Could be either "android" or "itunes".
 country_code = "US"     # Two letter country code.
-date = "2019-02-17"     # Date in YYYY-MM-DD format.
+app_id = "1171299921" # Unique app identifier (bundle ID).
 
-req_params = {"date": date,
-              "country": country_code}
+req_params = {"country": country_code}
 
 # Auth Parameters
 username = os.environ.get('USERNAME')
-password = os.environ.get('PASSWORD')          # Password can be anything.
+password = os.environ.get('PASSWORD')       # Password can be anything.
 
 # Request URL
-request_url = "https://api.appmonsta.com/v1/stores/%s/rankings.json" % store
+url = "https://api.appmonsta.com/v1/stores/%s/details/%s.json" % (store, app_id)
 
 # This header turns on compression to reduce the bandwidth usage and transfer time.
 headers = {'Accept-Encoding': 'deflate, gzip'}
 
 # Python Main Code Sample
-response = requests.get(request_url,
+response = requests.get(url,
                         auth=(username, password),
                         params=req_params,
                         headers=headers,
@@ -31,4 +30,4 @@ print (response.status_code)
 for line in response.iter_lines():
   # Load json object and print it out
   json_record = json.loads(line)
-  print (json_record)
+  print (json_record["app_name"])

@@ -1,7 +1,8 @@
 import os
+import pprint
 import requests
 import json
-from flask import Flask, render_template, request, flash, redirect, session
+from flask import Flask, render_template, request, flash, redirect, session, jsonify
 from model import connect_to_db, db, Employee, Game, EmployeeGame
 from flask_debugtoolbar import DebugToolbarExtension
 
@@ -196,18 +197,68 @@ def top_games_process():
         games.append(game_dict)
 
 
-        print(games)
-  
+
+    # game = []
+   
+    # for line in response.iter_lines():
+    #     """Load json object and print it out"""
+    #     game_dict = json.loads(line)
+    #     game.append(game_dict)
+
+
+
+
+    # def sort_by_rank(r):
+    #     '''a helper function for sorting'''
+    #     return r['rank']
+
+    # games=pprint.pprint(sorted(game, key=sort_by_rank))
+
 
     return render_template("top_games.html", json_record=games, store=store, country=country_code)          
                                              
 
 
-@app.route("/kidsappbox_game")
-def kidsappbox_game(game_name):
-	
+@app.route("/kidsappbox_game", methods=['GET'])
+def kidsappbox_game(employee_id):
 
-	return render_template("kidsappbox_game.html")
+    """select employee's game"""
+    games = db.session.query(Game).join(EmployeeGame).filter(EmployeeGame.employee_id == 111).all()
+	
+    for game in games:
+        app_id = game.app_id
+        store = "android"
+        print(app_id)
+    
+    country = "US"
+  
+
+    req_params = {"country": country}
+
+    # Request URL
+    url = "https://api.appmonsta.com/v1/stores/%s/details/%s.json" % (store, app_id)
+
+    # This header turns on compression to reduce the bandwidth usage and transfer time.
+    headers = {'Accept-Encoding': 'deflate, gzip'}
+
+    # Python Main Code Sample
+    response = requests.get(url,
+                            auth=(username, password),
+                            params=req_params,
+                            headers=headers,
+                            stream=True)
+
+    # print (response.status_code)
+
+   
+    for line in response.iter_lines():
+    # Load json object and print it out
+       json_record = json.loads(line)
+       print(json_record)
+    
+
+      
+    return render_template("kidsappbox_game.html", json_record=json_record)
 
 
 @app.route("/kidsappbox_game", methods=['POST'])
@@ -257,15 +308,15 @@ def details_any_games():
 
     return render_template("details_any_games.html")
 
-@app.route("/details_any_games/<string:country>/<string:store>/<string:app_id>", methods = ['POST'])
-def details_any_games_process():
 
-    """show details of any game"""
 
-    counrty = request.form["country"]
-    store = request.form["store"]
-    app_id = request.args["app_id"]
-
+@app.route("/details_any_games", methods=['POST'])
+def show_details():
+    #import pdb; pdb.set_trace()
+    """select country, store and App_id"""
+    country = request.form["country_type"]
+    store = request.form["store_type"]
+    app_id = request.form["app_id_type"]
 
     req_params = {"country": country}
 
@@ -284,22 +335,12 @@ def details_any_games_process():
 
     # print (response.status_code)
 
-    games=[]
-
-
+   
     for line in response.iter_lines():
     # Load json object and print it out
        json_record = json.loads(line)
-       print(json_record)
-       games.append(json_record)
-    return render_template("any_games.html", json_record=games)
-
-
-
-
-
-
-    return render_template("details_any_games.html")
+    
+    return jsonify(json_record)
 
 
 

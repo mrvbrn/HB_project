@@ -1,24 +1,57 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<form action="/details_any_games" method ="POST" id = "d_any_games">
+<h2>search details of  games</h2>
+<form id="select_form" method="POST">
+  <div class="form_group">
+  	<label>Store</label>
+        <select id="store_type_field" name="store_type" class="store_control">
+			  <option value="android">android</option>
+			  <option value="itunes">itunes</option>
+		</select>
+  </div>
 
-<select name="store">
-  <option value="android" id = "select-store">Android</option>
-  <option value="itunes" id = "select-store">iOS</option>
-</select>
-<select name="country">
-	 <option value="AU" id = "select-country">Australia</option>
-	 <option value="CAN" id = "select-country">Canada</option>
-	 <option value="CHN" id = "select-country">Chinese</option>
-	 <option value="FR" id = "select-country">France</option>
-	 <option value="DE" id = "select-country">Germany</option>
-	 <option value="GB" id = "select-country">United Kingdom</option>
-	 <option value="US" id = "select-country">United State</option>
-</select><br><br>
-    please enter app id.
-    <input type="text" name="app_id" required>
-	<input type="submit" value="Search">
+  <div class="form_group">
+    <label>Country</label>
+        <select id="country_type_field" name="country_type" class="country_control">
+			 <option value="AU" id = "select_country">Australia</option>
+			 <option value="CAN" id = "select_country">Canada</option>
+			 <option value="CHN" id = "select_country">Chinese</option>
+			 <option value="FR" id = "select_country">France</option>
+			 <option value="DE" id = "select_country">Germany</option>
+			 <option value="GB" id = "select_country">United Kingdom</option>
+			 <option value="US" id = "select_country">US</option>
+        </select>
+    
+  </div>
+  
+  <div class="form_group">
+    <label>please enter app id. </label>
+      <input class="app_id_contol" type="text" name="app_id_type" id="app_id_type_field" required>
+   
+  </div>
+
+  <div class="form_group">
+  	<button type="submit" id="search-form-button" class="btn btn primary">Search</button>
+  </div>
+</form>
+  <div id="details_game">
+    <ul>
+    <li><b>app_name: <span id='app_name'>Unknown</span></li>
+    <li>genre: <span id='genre'>Unknown</span></li>
+    <li>price: <span id='price'>Unknown</span></li>
+   </ul>
+  </div>	
+
+<script src="http://code.jquery.com/jquery.js"></script>
+<script type="text/javascript" src="/static/any-games.js"></script>
+<script type="text/javascript">
+  $("#search-form-button").on('click', (evt) => {
+      evt.preventDefault();
+      searchGames();
+    });
+</script>
+
 
 
 {% endblock %}

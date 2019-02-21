@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+ {% for r in json_record %}
+
+<p>{{r[app_name]}}</p>
+
+ {% endfor %}
+
+
+
+{% endblock %}
