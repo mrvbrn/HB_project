@@ -1,13 +1,17 @@
 {% extends 'base.html' %}
 {% block content %}
+{% for game in games %}
+<li>{{game}}</li>
+{% endfor %}
 
-
- {% for r in json_record %}
-
-<p>{{r[app_name]}}</p>
+{% for image in images %}
+<img src={{image}} height="112" width="112">
+<!-- <img src="/static/first_vehicles.jpg" height="42" width="42"> -->
 
  {% endfor %}
 
+<script src="http://code.jquery.com/jquery.js"></script>
 
+<script type="text/javascript" src="/static/any-games.js"></script>
 
-{% endblock %}
+{% endblock %} 

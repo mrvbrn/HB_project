@@ -35,12 +35,13 @@ def load_games(game_filename):
 
     for i, row in enumerate(open(game_filename)):
         row = row.rstrip()
-        game_id, store, app_id, game_name = row.split("|")
+        game_id, store, app_id, game_name, image= row.split("|")
 
         game = Game(game_id=game_id,
         	        store=store,
         	        app_id=app_id,
-                    game_name=game_name)
+                    game_name=game_name,
+                    image=image)
 
         # We need to add to the session or it won't ever be stored
         db.session.add(game)

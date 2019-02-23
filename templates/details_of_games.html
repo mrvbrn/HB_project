@@ -4,7 +4,7 @@
 
  {% for r in json_record %}
 
-<p>{{r['description']}}</p>
+<p>{{r['description'] | safe}}</p>
 
  {% endfor %}
 

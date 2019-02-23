@@ -45,6 +45,7 @@ class Game(db.Model):
     game_name = db.Column(db.String(100))
     app_id = db.Column(db.String(100))
     store = db.Column(db.String(20))
+    image=db.Column(db.String(50))
 
   
     employees = db.relationship("Employee", secondary = "employee_games", backref = "games")
@@ -53,7 +54,7 @@ class Game(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return f"<Game game_id={self.game_id} gname={self.game_name} app_id={self.app_id} store={self.store}>"
+        return f"<Game game_id={self.game_id} gname={self.game_name} app_id={self.app_id} store={self.store} image={self.image}>"
 
 class EmployeeGame(db.Model):
     """ Association table between Employee and Game"""

@@ -2,6 +2,25 @@
 
 {% block content %}
 
+
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>
+
 <h1>top twenty games</h1>
 
 
@@ -44,29 +63,66 @@
 </form>
 
   
-  {% for r in json_record %}
 
-<table style="width:100%">
+
+<table >
 
   <tr>
-    <th>Rank</th>
     <th>App Id</th> 
     <th>App Name</th>
     <th>Average Rating</th>
     <th>Price</th> 
   </tr>
-
+   {% for r in json_record %}
   <tr>
-    <td>{{r["rank"]}}</td>
+   
     <td><a href="/details_of_games/{{country}}/{{store}}/{{r['app_id']}}">{{r["app_id"]}}</a></td>
     <td>{{r["app_name"]}}</td>
     <td>{{r["avg_rating"]}}</td>
     <td>{{r["price"]}}</td>
+    <td>{{r["rank"]}}</td>
+
+   
   </tr>
-
+  
+  {% endfor %}
 </table>
- {% endfor %}
 
+
+
+  
+<script>
+  function getDataForRankingVisualization() {
+    return [  {% for r in json_record %}
+      {name: "{{ r['app_name'] }}", avg_rating: "{{r['avg_rating']}}"},
+     {% endfor %}];
+  }
+</script>
+
+
+
+ <div class="chart-example" id="chart"><svg></svg></div>
+
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="/static/top-games.js"></script>
+
+<!-- 
+  <script>
+
+   d3.json('/top_twenty_games', makeForceLayout);
+
+     function makeForceLayout(json_record){
+
+     console.log(json_record)
+    }
+      // selection.datum() returns the bound datum for the first element in the selection and 
+      //  doesn't join the specified array of data with the selected elements
+      var chart = bubbleChart().width(600).height(400);
+      d3.select('#chart').datum(getDataForRankingVisualization()).call(chart);
+ 
+
+</script> 
+ -->
 
 
 
@@ -85,5 +141,17 @@
 <!-- <script src="http://code.jquery.com/jquery.js"></script>
 <script type="text/javascript" src="/static/js/top_games.js"></script> -->
 
+
+
+<!-- <div class="chart-example" id="chart"></div> -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.6.0/d3.min.js"></script>
+<script src="static/any-games.js"></script>
+
+
+
+
+<!-- 
+var chart = bubbleChart().width(600).height(400); -->
 
 {% endblock %}
