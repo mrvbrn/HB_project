@@ -33,11 +33,16 @@ var simulation = d3.forceSimulation(data)
 function ticked(e) {
     node.attr("cx", function(d) { return d.x; })
         .attr("cy", function(d) { return d.y; });
-    // 'node' is each circle of the bubble chart
+}
 
 var colorCircles = d3.scaleOrdinal(d3.schemeCategory10);
 
-var tooltip = selection
+var scaleRadius = d3.scaleLinear()
+            .domain([d3.min(data, function(d) { return +d.avg_rating; }),
+                    d3.max(data, function(d) { return +d.avg_rating; })])
+            .range([5,18]);
+
+var tooltip = d3.select("body")
  .append("div")
  .style("position", "absolute")
  .style("visibility", "hidden")
@@ -56,27 +61,18 @@ let svgContainer = d3.select("body")
                      .attr("width", 800)
                      .attr("height", 1000);
 
-console.log(data);
 var node = svgContainer.selectAll("circle")
               .data(data)
               .enter()
               .append("circle")
               .attr('r', function(d) { return scaleRadius(d.avg_rating)})
-              // .style("fill", function(d) { return colorCircles(d.catego)})
-              .attr('transform', 'translate(' + [width / 2, height / 2] + ')')
+              .style("fill", function(d) { return colorCircles(d.avg_rating)})
+              .attr('transform', 'translate(' + [800 / 2, 1000 / 2] + ')')
               .on("mouseover", function(d) {
-                   tooltip.html(d.name+"<br/>"); 
+                   tooltip.html(d.name+"<br/>");
                    return tooltip.style("visibility", "visible");
               })
               .on("mousemove", function(){
                   return tooltip.style("top", (d3.event.pageY-       10)+"px").style("left",(d3.event.pageX+10)+"px");
               })
               .on("mouseout", function(){return tooltip.style("visibility", "hidden");});
-
-
-
-
-var scaleRadius = d3.scaleLinear()
-            .domain([d3.min(data, function(d) { return +d.avg_rating; }), 
-                    d3.max(data, function(d) { return +d.avg_rating; })])
-            .range([5,18]);
