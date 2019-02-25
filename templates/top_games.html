@@ -23,7 +23,7 @@ tr:nth-child(even) {
 
 <h1>top twenty games</h1>
 
-
+ 
   <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
 <form action="/top_twenty_games" method ="POST" id = "search_game">
 
@@ -42,15 +42,6 @@ tr:nth-child(even) {
 </select>
 
 
-<!-- <div class="dropdown">
-  <button onclick="myFunction()" class="dropbtn">Select Country</button>
-  <div id="myDropdown" class="dropdown-content">
-    <option value="AU">UNITED STATE</option>
-    <a href="#">United state</a>
-    <a href="#contact">Contact</a>
-  </div>
-</div>
- -->
 
 
 
@@ -87,21 +78,21 @@ tr:nth-child(even) {
   
   {% endfor %}
 </table>
-
+<br><br>
 
 
   
 <script>
   function getDataForRankingVisualization() {
     return [  {% for r in json_record %}
-      {name: "{{ r['app_name'] }}", avg_rating: "{{r['avg_rating']}}"},
+      {name: "{{ r['app_name'] }}", rank: "{{ r['rank'] }}", rating:"{{ r['avg_rating'] }}"},
      {% endfor %}];
   }
 </script>
 
 
+<div class="chart-example" id="chart"><svg></svg></div>
 
- <div class="chart-example" id="chart"><svg></svg></div>
 
   <script src="https://d3js.org/d3.v4.min.js"></script>
   <script src="/static/top-games.js"></script>
@@ -127,26 +118,8 @@ tr:nth-child(even) {
 
 
 
-
-<!-- <button id='getInfo'>Get Information!</button>
-<p>
-  <ul>
-    <li><b>App_name: <span id='app_name'>Unknown</span></li>
-    <li>Avr_rating: <span id='avr_rating'>Unknown</span></li>
-    <li>price: <span id='price'>Unknown</span></li>
-    <li>country: <span id='country'>Unknown</span></li>
-  </ul>
-</p> -->
-
-<!-- <script src="http://code.jquery.com/jquery.js"></script>
-<script type="text/javascript" src="/static/js/top_games.js"></script> -->
-
-
-
 <!-- <div class="chart-example" id="chart"></div> -->
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.6.0/d3.min.js"></script>
-<script src="static/any-games.js"></script>
 
 
 

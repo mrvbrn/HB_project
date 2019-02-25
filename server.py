@@ -200,24 +200,26 @@ def top_games_process():
 
 
 
-@app.route("/employees/<int:employee_id>/kidsappbox_game", methods=['GET'])
+@app.route("/employees/<int:employee_id>/kidsappbox_game", methods=['GET', 'POST'])
 def kidsappbox_game(employee_id):
 
     """select employee's game"""
     games = db.session.query(Game).join(EmployeeGame).filter(EmployeeGame.employee_id == employee_id).all()
     
-
+    """ make a list of employeeis game"""
     game_list=[]
-    img_list=[]
+  
 
     for game in games:
-        if game.game_name not in game_list and game.image not in img_list:
-            game_list.append(game.game_name)
-            img_list.append(game.image)
+        if [game.game_name, game.image] not in game_list:
 
-    
+            game_list.append([game.game_name, game.image])
 
-    return render_template("kidsappbox.html", games=game_list, images=img_list)
+
+
+   
+
+    return render_template("kidsappbox.html", games=game_list)
 
 
 
@@ -226,21 +228,20 @@ def kidsappbox_game(employee_id):
 @app.route("/employees/<int:employee_id>/kidsappbox_game", methods=['POST'])
 def kidsappbox_process(employee_id):
 
-    """select employee's game"""
-    games = db.session.query(Game).join(EmployeeGame).filter(EmployeeGame.employee_id == employee_id).all()
-	
+    gamename = request.args.get("game_name")
+    country = request.form["country_type"]
+    store = request.form["store_type"]
+
+    games = db.session.query(Game).join(EmployeeGame).filter(EmployeeGame.employee_id == employee_id).filter(Game.store == store).filter(Game.game_name == gamename).all()
     for game in games:
         app_id = game.app_id
-        store = "android"
-        print(app_id)
-    
-    # country = "US"
-  
+
+
 
     req_params = {"country": country}
 
     # Request URL
-    url = f"https://api.appmonsta.com/v1/stores/{store}/details/{app_id}.json"
+    url = f"https://api.appmonsta.com/v1/stores/{store}/details/{app_id}.json" 
 
     # This header turns on compression to reduce the bandwidth usage and transfer time.
     headers = {'Accept-Encoding': 'deflate, gzip'}
@@ -252,27 +253,17 @@ def kidsappbox_process(employee_id):
                             headers=headers,
                             stream=True)
 
-    print (response.status_code)
+    # print (response.status_code)
 
    
     for line in response.iter_lines():
-    # Load json object and print it out
-       json_record = json.loads(line)
-    
- 
+        # Load json object and print it out
+        json_record = json.loads(line)
 
-      
-    return render_template("kidsappbox.html", json_record=json_record)
+    return jsonify(json_record) 
 
 
-@app.route("/kidsappbox_game", methods=['POST'])
-def kidsappbox_game_process(game_name):
-    """Show kidsappbox game information"""
-
-    return render_template("kidsappbox_game.html")
-
-       
-
+    return render_template("kidsappbox.html", appId=app_id, games=json_record)
 
 @app.route("/details_of_games/<string:country>/<string:store>/<string:app_id>", methods = ['GET', 'POST'])
 def details_of_games(country, store, app_id):
@@ -337,19 +328,12 @@ def show_details():
                             headers=headers,
                             stream=True)
 
-    # print (response.status_code)
-
    
     for line in response.iter_lines():
     # Load json object and print it out
        json_record = json.loads(line)
     
     return jsonify(json_record)
-
-# @app.route("/top_twenty_games.json")
-# def top_games_json():
-
-
 
 
 
