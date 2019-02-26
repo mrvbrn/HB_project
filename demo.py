@@ -7,9 +7,9 @@ from flask import jsonify
 
 
 # Request Parameters
-store = "android"       # Could be either "android" or "itunes".
+store = "itunes"       # Could be either "android" or "itunes".
 country_code = "US"     # Two letter country code.
-app_id = "com.facebook.orca" # Unique app identifier (bundle ID).
+app_id = "1275331814" # Unique app identifier (bundle ID).
 
 req_params = {"country": country_code}
 

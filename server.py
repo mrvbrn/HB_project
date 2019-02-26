@@ -226,16 +226,48 @@ def kidsappbox_game(employee_id):
 
 
 @app.route("/employees/<int:employee_id>/kidsappbox_game", methods=['POST'])
-def kidsappbox_process(employee_id):
+def kidsappbox_process(employee_id, gamename):
 
     gamename = request.args.get("game_name")
     country = request.form["country_type"]
-    store = request.form["store_type"]
+    
+    if store == "android":
 
-    games = db.session.query(Game).join(EmployeeGame).filter(EmployeeGame.employee_id == employee_id).filter(Game.store == store).filter(Game.game_name == gamename).all()
-    for game in games:
-        app_id = game.app_id
+        games_android = db.session.query(Game).join(EmployeeGame).filter(EmployeeGame.employee_id == employee_id).filter(Game.store == "Android").filter(Game.game_name == gamename).all()
+        for game in games_android:
+            app_id = game.app_id
 
+
+        req_params = {"country": country}
+
+        # Request URL
+        url = f"https://api.appmonsta.com/v1/stores/{store}/details/{app_id}.json" 
+
+        # This header turns on compression to reduce the bandwidth usage and transfer time.
+        headers = {'Accept-Encoding': 'deflate, gzip'}
+
+        # Python Main Code Sample
+        response = requests.get(url,
+                                auth=(username, password),
+                                params=req_params,
+                                headers=headers,
+                                stream=True)
+
+        # print (response.status_code)
+
+
+    for line in response.iter_lines():
+        # Load json object and print it out
+        json_android = json.loads(line)
+
+    return jsonify(json_android)
+         
+
+    else:
+
+        games_itunes = db.session.query(Game).join(EmployeeGame).filter(EmployeeGame.employee_id == employee_id).filter(Game.store == "itunes").filter(Game.game_name == gamename).all()
+        for game in games_itunes:
+            app_id = game.app_id 
 
 
     req_params = {"country": country}
@@ -256,14 +288,15 @@ def kidsappbox_process(employee_id):
     # print (response.status_code)
 
    
-    for line in response.iter_lines():
+        for line in response.iter_lines():
         # Load json object and print it out
-        json_record = json.loads(line)
+           json_itunes = json.loads(line)
 
-    return jsonify(json_record) 
+        return jsonify(json_itunes)
+        print(json_itunes) 
 
 
-    return render_template("kidsappbox.html", appId=app_id, games=json_record)
+    return render_template("kidsappbox.html", json_android=json_android, json_itunes=json_itunes)
 
 @app.route("/details_of_games/<string:country>/<string:store>/<string:app_id>", methods = ['GET', 'POST'])
 def details_of_games(country, store, app_id):

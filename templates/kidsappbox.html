@@ -1,29 +1,10 @@
 {% extends 'base.html' %}
 {% block content %}
-
-<style>
-table {
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 50%;
-  margin-left: 30%;
-}
-
-td, th {
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 8px;
-}
-
-tr:nth-child(even) {
-  background-color: #dddddd;
-}
-</style>
 {% for game in games %}
   
  
-<form  id="select_form" action="/employees/<int:employee_id>/kidsappbox_game" method ="POST">
-<img src={{game[1]}} height="112" width="112">
+<form  id="select_form" method ="POST">
+<img src={{game[1]}} height="112" width="112" class="image">
 <select id="store_type_field" name="store_type" class="store_control">
   <option value="android" id = "select-store">Android</option>
   <option value="itunes" id = "select-store">iOS</option>
@@ -41,52 +22,50 @@ tr:nth-child(even) {
   	<button type="submit" id="search-form-button" class="btn btn primary">Search</button>
 
    <h4 id="game_name">{{game[0]}}</h4> 
- 
 
 
-	<table style="float:inherit;" class="android" id="kidsappbox_game_android" name="kidsappbox_table">
 
-	  <tr>
-	    <th>average_rating</th> 
-	    <th>downloads</th>
-	    <th>histogram</th>
-	  </tr>
-	   {% for r in json_record %}
-	  <tr>
-	    <td>{{r["all_rating"]}}</td>
-	    <td>{{r["downloads"]}}</td>
-	    <td>{{r["all_histogram"]}}</td>
-	  </tr>
-	  
-	  {% endfor %}
-	</table>
- </form>
+   <div style="float:inherit;" id="details_android" class="kidsappbox_android">
+   	
+    <ul>
+    <li>Store: Android 
+    <li>Average Rating: <span id='avg_rating'>*</span></li>
+    <li>Total Downloads: <span id='downloads'>*</span></li>
+    <li>All Histogram: <span id='histogram'>*</span></li>
+   </ul>
+  
+  </div>	
+  <div style="float:inherit;" id="details_itunes" class="kidsappbox_itunes">
+   	
+    <ul>
+    <li>Store: iTunes
+    <li>Average Rating: <span id='avg_ratings'>*</span></li>
+    <li>Total Reviews: <span id='reviews'>*</span></li>
+    <li>All Histogram: <span id='histograms'>*</span></li>
+   </ul>
+  
+  </div>	
+
 
 	{% endfor %}
-<!-- 
-<div class="itunes" id="kidsappbox_game_itunes">
-	<table>
-
-	  <tr>
-	    <th>average_rating</th> 
-	    <th>reviews</th>
-	    <th>histogram</th>
-	  </tr>
-	   {% for r in json_record %}
-	  <tr>
-	    <td>{{r["all_rating"]}}</td>
-	    <td>{{r["current_reviews"]}}</td>
-	    <td>{{r["all_histogram"]}}</td>
-	  </tr>
-	  
-	  {% endfor %}
-	</table>
-</div> -->
-
+ 
 
 
 	<script src="http://code.jquery.com/jquery.js"></script>
 
 	<script type="text/javascript" src="/static/kidsappbox.js"></script>
+	<script type="text/javascript">
+  $("#search-form-button").on('click', (evt) => {
+      evt.preventDefault();
+      console.log("hello")
+      searchAndroid();
+    });
+
+  $("#search-form-button").on('click', (evt) => {
+      evt.preventDefault();
+      console.log("hello")
+      searchiTunes();
+    });
+</script>
 
 {% endblock %} 
