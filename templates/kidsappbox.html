@@ -1,71 +1,89 @@
 {% extends 'base.html' %}
 {% block content %}
+
 {% for game in games %}
-  
- 
-<form  id="select_form" method ="POST">
-<img src={{game[1]}} height="112" width="112" class="image">
-<select id="store_type_field" name="store_type" class="store_control">
-  <option value="android" id = "select-store">Android</option>
-  <option value="itunes" id = "select-store">iOS</option>
-</select>
-<select id="country_type_field" name="country_type" class="country_control">
-	 <option value="AU" id = "select-country">Australia</option>
-	 <option value="CAN" id = "select-country">Canada</option>
-	 <option value="CHN" id = "select-country">Chinese</option>
-	 <option value="FR" id = "select-country">France</option>
-	 <option value="DE" id = "select-country">Germany</option>
-	 <option value="GB" id = "select-country">United Kingdom</option>
-	 <option value="US" id = "select-country">United State</option>
-</select>
+    <div class="game">
+        <div class="game-info">
+            <h4 id="game_name" name="game_name">{{ game.game_name }}</h4> 
+            <p>{{ game.store }}</p>
+            <img src="{{ game.image }}"" height="112" width="112" class="image">
+        </div>
+        <div class="game-search">
+            <form
+                class="game-search-form"
+                action="/employees/{{employee.employee_id}}/kidsappbox_game"
+                method="POST"
+                data-gameid="{{ game.game_id }}"
+            >
+                <select id="store_type_field" name="store_type" class="store_control">
+            		<option value="android" id="select-store">Android</option>
+            		<option value="itunes" id="select-store">iOS</option>
+                </select>
+                <select id="country_type_field" name="country_type" class="country_control">
+            		<option value="AU" id = "select-country">Australia</option>
+            		<option value="CAN" id = "select-country">Canada</option>
+            		<option value="CHN" id = "select-country">Chinese</option>
+            		<option value="FR" id = "select-country">France</option>
+            		<option value="DE" id = "select-country">Germany</option>
+            		<option value="GB" id = "select-country">United Kingdom</option>
+            		<option value="US" id = "select-country">United State</option>
+                </select>
+       
+              	<button type="submit" class="btn btn primary">Search</button>
+            </form>
+        </div>
+        <div class="game-chart">
+            <canvas id="chart-{{ game.game_id }}">
+            </canvas>
+            <div id="legend-{{ game.game_id }}">
+            </div>
+        </div>
+    </div>
+{% endfor %}
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.1/Chart.js"></script>
+  <script>
+    $('.game-search-form').on('submit', (evt) => {
+        evt.preventDefault();
+        const gameId = $(evt.target).data('data-gameid');
+        console.log(gameId);
+        console.log(evt.target);
 
-  	<button type="submit" id="search-form-button" class="btn btn primary">Search</button>
+        $.get(`/game-data/${gameId}`, data => {
+            const ctx = $(`#chart-${gameId}`).get(0).getContext('2d');
+            const donutChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: data,
+                options: { responsive: true }
+            });
+            $(`#legend-${gameId}`).html(donutChart.generateLegend());
+        });
 
-   <h4 id="game_name">{{game[0]}}</h4> 
-
-
-
-   <div style="float:inherit;" id="details_android" class="kidsappbox_android">
-   	
-    <ul>
-    <li>Store: Android 
-    <li>Average Rating: <span id='avg_rating'>*</span></li>
-    <li>Total Downloads: <span id='downloads'>*</span></li>
-    <li>All Histogram: <span id='histogram'>*</span></li>
-   </ul>
-  
-  </div>	
-  <div style="float:inherit;" id="details_itunes" class="kidsappbox_itunes">
-   	
-    <ul>
-    <li>Store: iTunes
-    <li>Average Rating: <span id='avg_ratings'>*</span></li>
-    <li>Total Reviews: <span id='reviews'>*</span></li>
-    <li>All Histogram: <span id='histograms'>*</span></li>
-   </ul>
-  
-  </div>	
-
-
-	{% endfor %}
- 
-
-
-	<script src="http://code.jquery.com/jquery.js"></script>
-
-	<script type="text/javascript" src="/static/kidsappbox.js"></script>
-	<script type="text/javascript">
-  $("#search-form-button").on('click', (evt) => {
-      evt.preventDefault();
-      console.log("hello")
-      searchAndroid();
     });
+    // const options = {
+    //   responsive: true
+    // };
+    // let ctx_donut = $("#donutChart").get(0).getContext("2d");
 
-  $("#search-form-button").on('click', (evt) => {
-      evt.preventDefault();
-      console.log("hello")
-      searchiTunes();
-    });
-</script>
+    // $.get("/kidsappbox.json", function (data) {
+    //   let myDonutChart = new Chart(ctx_donut, {
+    //                                           type: 'doughnut',
+    //                                           data: data,
+    //                                           options: options
+    //                                         });
+    //   $('#donutLegend').html(myDonutChart.generateLegend());
+    // });
 
-{% endblock %} 
+
+    // let ctx_line = $("#lineChart").get(0).getContext("2d");
+
+    // $.get("/kidsappbox.json", function (data) {
+    //   let myLineChart = Chart.Line(ctx_line, {
+    //                                 data: data,
+    //                                 options: options
+    //                             });
+    //   $("#lineLegend").html(myLineChart.generateLegend());
+    // });
+  </script>
+
+
+{% endblock %}

@@ -200,12 +200,12 @@ def top_games_process():
 
 
 
-@app.route("/employees/<int:employee_id>/kidsappbox_game", methods=['GET', 'POST'])
+@app.route("/employees/<int:employee_id>/kidsappbox_game", methods=['GET'])
 def kidsappbox_game(employee_id):
 
     """select employee's game"""
     games = db.session.query(Game).join(EmployeeGame).filter(EmployeeGame.employee_id == employee_id).all()
-    
+    employee = Employee.query.get(employee_id)
     """ make a list of employeeis game"""
     game_list=[]
   
@@ -215,66 +215,35 @@ def kidsappbox_game(employee_id):
 
             game_list.append([game.game_name, game.image])
 
-
+    gamename= game.game_name
 
    
 
-    return render_template("kidsappbox.html", games=game_list)
+    return render_template("kidsappbox.html", games=games, employee=employee, gamename=gamename)
 
 
 
 
 
-@app.route("/employees/<int:employee_id>/kidsappbox_game", methods=['POST'])
-def kidsappbox_process(employee_id, gamename):
+@app.route("/game-data/<game_id>")
+def kidsappbox_process(game_id):
 
-    gamename = request.args.get("game_name")
-    country = request.form["country_type"]
+
+    # gamename = request.form["game_name"]
+    # country = request.form["country_type"]
+    # store = request.form["store_type"]
+
+    store = "itunes"
+    country = "US"
     
-    if store == "android":
-
-        games_android = db.session.query(Game).join(EmployeeGame).filter(EmployeeGame.employee_id == employee_id).filter(Game.store == "Android").filter(Game.game_name == gamename).all()
-        for game in games_android:
-            app_id = game.app_id
-
-
-        req_params = {"country": country}
-
-        # Request URL
-        url = f"https://api.appmonsta.com/v1/stores/{store}/details/{app_id}.json" 
-
-        # This header turns on compression to reduce the bandwidth usage and transfer time.
-        headers = {'Accept-Encoding': 'deflate, gzip'}
-
-        # Python Main Code Sample
-        response = requests.get(url,
-                                auth=(username, password),
-                                params=req_params,
-                                headers=headers,
-                                stream=True)
-
-        # print (response.status_code)
-
-
-    for line in response.iter_lines():
-        # Load json object and print it out
-        json_android = json.loads(line)
-
-    return jsonify(json_android)
-         
-
-    else:
-
-        games_itunes = db.session.query(Game).join(EmployeeGame).filter(EmployeeGame.employee_id == employee_id).filter(Game.store == "itunes").filter(Game.game_name == gamename).all()
-        for game in games_itunes:
-            app_id = game.app_id 
-
+    game = Game.query.get(game_id)
+    # games = db.session.query(Game).join(EmployeeGame).filter(EmployeeGame.employee_id == employee_id).filter(Game.store == store).filter(Game.game_name == gamename).all()
 
     req_params = {"country": country}
 
     # Request URL
-    url = f"https://api.appmonsta.com/v1/stores/{store}/details/{app_id}.json" 
-
+    url = f"https://api.appmonsta.com/v1/stores/{store}/details/{game.app_id}.json" 
+    # 'all_histogram': {'1': 15, '3': 2, '2': 4, '5': 20, '4': 8}
     # This header turns on compression to reduce the bandwidth usage and transfer time.
     headers = {'Accept-Encoding': 'deflate, gzip'}
 
@@ -284,19 +253,37 @@ def kidsappbox_process(employee_id, gamename):
                             params=req_params,
                             headers=headers,
                             stream=True)
+    # import pprint
+    # pprint.pprint(response.json())
+    game_data = response.json()
+    if game_data.get('all_histogram'):
 
-    # print (response.status_code)
-
-   
-        for line in response.iter_lines():
-        # Load json object and print it out
-           json_itunes = json.loads(line)
-
-        return jsonify(json_itunes)
-        print(json_itunes) 
-
-
-    return render_template("kidsappbox.html", json_android=json_android, json_itunes=json_itunes)
+        data_dict = {
+                    "labels": list(game_data['all_histogram'].keys()),
+                    "datasets": [
+                        {
+                            "data": list(game_data['all_histogram'].values()),
+                            "backgroundColor": [
+                                "#FF6384",
+                                "#36A2EB",
+                                "#FFCE56",
+                                "purple",
+                                "yellow"
+                            ],
+                            "hoverBackgroundColor": [
+                                "#FF6384",
+                                "#36A2EB",
+                                "#FFCE56"
+                                "purple"
+                                "yellow"
+                            ]
+                        }]
+                }
+        return jsonify(data_dict)
+    else:
+        return jsonify('No data for this game')
+  
+             
 
 @app.route("/details_of_games/<string:country>/<string:store>/<string:app_id>", methods = ['GET', 'POST'])
 def details_of_games(country, store, app_id):
@@ -367,7 +354,6 @@ def show_details():
        json_record = json.loads(line)
     
     return jsonify(json_record)
-
 
 
 

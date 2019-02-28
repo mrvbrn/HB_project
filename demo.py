@@ -7,9 +7,9 @@ from flask import jsonify
 
 
 # Request Parameters
-store = "itunes"       # Could be either "android" or "itunes".
+store = "android"       # Could be either "android" or "itunes".
 country_code = "US"     # Two letter country code.
-app_id = "1275331814" # Unique app identifier (bundle ID).
+app_id = "com.androbaby.firstwordsforbaby" # Unique app identifier (bundle ID).
 
 req_params = {"country": country_code}
 
@@ -30,7 +30,20 @@ response = requests.get(url,
                         stream=True)
 
 print (response.status_code)
-for line in response.iter_lines():
-  # Load json object and print it out
+for line in response.iter_lines():# Load json object and print it out
   json_record = json.loads(line)
-  print(json_record)
+  games = json_record['all_histogram']
+  rating = json_record['all_rating']
+
+  print(rating)
+
+key_list=[]
+value_list=[]
+for key, value in games.items():
+    key_list.append(key)
+    print(key)
+    value_list.append(value)
+
+print(key_list)
+print(value_list)
+

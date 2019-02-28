@@ -1,43 +1,65 @@
-function showResults(json_android) {
-
-  $('#avg_rating').html(json_record["avg_rating"]);
-  $('#downloads').html(json_record["downloads"]);
-  $('#histogram').html(json_record["all_histogram"]);
-}
-
-
-function searchAndroid() {
-
-    let formInputs = {
-        "country_type": $("#country_type_field").val(),
-        store : "android"
-        app_id : "appId"
-    };
-
-
-    $.post("/employees/<int:employee_id>/kidsappbox_game", formInputs, showResults);
-}
 
 
 
 
 
-function showResult(json_itunes) {
 
-  $('#avg_ratings').html(json_record["avg_rating"]);
-  $('#reviews').html(json_record["all_reviews"]);
-  $('#histograms').html(json_record["all_histogram"]);
-}
+// var myPieChart = new Chart(ctx,{
+//     type: 'pie',
+//     data: data,
+//     options: options
+// });
+// var myDoughnutChart = new Chart(ctx, {
+//     type: 'doughnut',
+//     data: data,
+//     options: options
+// });
+
+// function searchGames() {
+
+//     let formInputs = {
+//         "country_type": $("#country_type_field").val(),
+//         "store_type": $("#store_type_field").val(),
+//     };
 
 
-function searchiTunes() {
-
-    let formInput = {
-        "country_type": $("#country_type_field").val(),
-        "store_type": "itunes",
-        "app_id_type": "appId"
-    };
+//     $.post("/employees/<int:employee_id>/kidsappbox_game", formInputs, showResults);
+// }
 
 
-    $.post("/employees/<int:employee_id>/kidsappbox_game", formInput, showResult);
-}
+//     data_dict = {
+//            labels: single_game[0],
+//            datasets: [
+//            {
+//            data: single_game[1],
+//         backgroundColor: [
+//                 "blue",
+//                 "red",
+//                 "pink",
+//                 "yellow",
+//                 "green",
+
+//             ],
+//         hoverBackgroundColor: [
+//                 "blue",
+//                 "red",
+//                 "pink",
+//                 "yellow",
+//                 "green",
+//                         ]
+//     }],
+
+//     };
+
+// var ctx = $("#donutChart").get(0).getContext("2d");
+
+// function showResults(data){
+// let myDonutChart = new Chart(ctx_donut, {
+//                                           type: 'doughnut',
+//                                           data: data_dict,
+//                                           options: options
+//                                         });
+// $('#donutLegend').html(myDonutChart.generateLegend());
+//     };
+
+    
