@@ -12,12 +12,12 @@
             <form
                 class="game-search-form"
                 action="/employees/{{employee.employee_id}}/kidsappbox_game"
-                method="POST"
+                method="GET"
                 data-gameid="{{ game.game_id }}"
             >
                 <select id="store_type_field" name="store_type" class="store_control">
-            		<option value="android" id="select-store">Android</option>
-            		<option value="itunes" id="select-store">iOS</option>
+            		<option value="android" id="select-store">android</option>
+            		<option value="itunes" id="select-store">itunes</option>
                 </select>
                 <select id="country_type_field" name="country_type" class="country_control">
             		<option value="AU" id = "select-country">Australia</option>
@@ -32,57 +32,41 @@
               	<button type="submit" class="btn btn primary">Search</button>
             </form>
         </div>
-        <div class="game-chart">
-            <canvas id="chart-{{ game.game_id }}">
+        <div  class="game-chart">
+            <canvas  id="chart-{{ game.game_id }}">
+                
             </canvas>
-            <div id="legend-{{ game.game_id }}">
-            </div>
+            <div id="legend-{{ game.game_id }}"></div>
         </div>
     </div>
 {% endfor %}
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.1/Chart.js"></script>
+  <script src="https://code.jquery.com/jquery.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
   <script>
     $('.game-search-form').on('submit', (evt) => {
         evt.preventDefault();
-        const gameId = $(evt.target).data('data-gameid');
+        const gameId = $(evt.target).data('gameid');
         console.log(gameId);
         console.log(evt.target);
 
         $.get(`/game-data/${gameId}`, data => {
-            const ctx = $(`#chart-${gameId}`).get(0).getContext('2d');
-            const donutChart = new Chart(ctx, {
-                type: 'doughnut',
-                data: data,
-                options: { responsive: true }
-            });
-            $(`#legend-${gameId}`).html(donutChart.generateLegend());
+            if (data === 'No data for this game') {
+                $(`#legend-${gameId}`).append('No data');
+            } else {
+                const ctx = $(`#chart-${gameId}`).get(0).getContext('2d');
+                const donutChart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: data,
+                    options: { responsive: true,
+                               maintainAspectRatio: false
+                            }
+                });
+                $(`#legend-${gameId}`).html(donutChart.generateLegend());
+            }
         });
 
     });
-    // const options = {
-    //   responsive: true
-    // };
-    // let ctx_donut = $("#donutChart").get(0).getContext("2d");
-
-    // $.get("/kidsappbox.json", function (data) {
-    //   let myDonutChart = new Chart(ctx_donut, {
-    //                                           type: 'doughnut',
-    //                                           data: data,
-    //                                           options: options
-    //                                         });
-    //   $('#donutLegend').html(myDonutChart.generateLegend());
-    // });
-
-
-    // let ctx_line = $("#lineChart").get(0).getContext("2d");
-
-    // $.get("/kidsappbox.json", function (data) {
-    //   let myLineChart = Chart.Line(ctx_line, {
-    //                                 data: data,
-    //                                 options: options
-    //                             });
-    //   $("#lineLegend").html(myLineChart.generateLegend());
-    // });
+ 
   </script>
 
 

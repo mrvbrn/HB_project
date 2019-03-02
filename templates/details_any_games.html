@@ -1,19 +1,37 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<style>
+  table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 70%;
+      }
+
+  td, th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+      }
+
+  tr:nth-child(even) {
+      background-color: #dddddd;
+      }
+</style>
+
 <h2>search details of  games</h2>
 <form id="select_form" method="POST">
   <div class="form_group">
-  	<label>Store</label>
-        <select id="store_type_field" name="store_type" class="store_control">
+  	  <label>Store</label>
+    <select id="store_type_field" name="store_type" class="store_control">
 			  <option value="android">android</option>
 			  <option value="itunes">itunes</option>
 		</select>
   </div>
 
   <div class="form_group">
-    <label>Country</label>
-        <select id="country_type_field" name="country_type" class="country_control">
+      <label>Country</label>
+    <select id="country_type_field" name="country_type" class="country_control">
 			 <option value="AU" id = "select_country">Australia</option>
 			 <option value="CAN" id = "select_country">Canada</option>
 			 <option value="CHN" id = "select_country">Chinese</option>
@@ -21,21 +39,55 @@
 			 <option value="DE" id = "select_country">Germany</option>
 			 <option value="GB" id = "select_country">United Kingdom</option>
 			 <option value="US" id = "select_country">US</option>
-        </select>
+    </select>
     
   </div>
   
   <div class="form_group">
-    <label>please enter app id. </label>
-      <input class="app_id_contol" type="text" name="app_id_type" id="app_id_type_field" required>
+      <label>App Id</label>
+    <input class="app_id_contol" type="text" name="app_id_type" id="app_id_type_field" required>
    
   </div>
 
   <div class="form_group">
-  	<button type="submit" id="search-form-button" class="btn btn primary">Search</button>
+  	  <button type="submit" id="search-form-button" class="btn btn primary">Search</button>
   </div>
+  <br><br>
 </form>
+
   <div id="details_game">
+    <table>
+    <tr>
+       <th>App Name:</th>
+       <td><span id="app_name">*</td>
+    </tr>
+    <tr>
+       <th>Genre:</th>
+       <td><span id="genre">*</td>
+    </tr>
+    <tr>
+       <th>Average Rating:</th>
+    <td><span id="rating">*</td>
+    </tr>
+    <tr>
+      <th>Price:</th>
+    <td><span id="price">*</td>
+    </tr>
+    </table>
+  </div>
+
+<script src="http://code.jquery.com/jquery.js"></script>
+<script type="text/javascript" src="/static/any-games.js"></script>
+<script type="text/javascript">
+  $("#search-form-button").on('click', (evt) => {
+      evt.preventDefault();
+      searchGames();
+    });
+</script>
+
+
+
+<!--   <div id="details_game">
     <ul>
     <li><b>app_name: <span id='app_name'>Unknown</span></li>
     <li>genre: <span id='genre'>Unknown</span></li>
@@ -50,7 +102,7 @@
       evt.preventDefault();
       searchGames();
     });
-</script>
+</script> -->
 
 
 

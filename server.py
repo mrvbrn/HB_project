@@ -32,34 +32,81 @@ def homepage():
 @app.route('/login', methods=['GET'])
 def login_form():
     """Show login form."""
+      # Get form variables
+    
+
 
     return render_template("login.html")
 
 
 
-@app.route("/login", methods=['POST'])
+@app.route("/login.json", methods=['POST'])
 def login_process():
-    """Process login."""
 
-    # Get form variables
-    email = request.form["email"]
-    password = request.form["password"]
+    email = request.form["email_info"]
+    password = request.form["password_info"]
     employee = Employee.query.filter_by(email=email).first()
-
-
+    # confirm_password = employee.password
+    # confirm_email = employee.email
+  
 
     if not employee:
-        flash("No such employee")
-        return redirect("/register")
 
-    if employee.password != password:
-        flash("Incorrect password")
-        return redirect("/login")
+        data = {
 
-    session["employee_id"] = employee.employee_id
+        'email' : email,
+        'password' : password,
+        'employee' : None,
+        }
 
-    flash("You are successfully log in")
-    return redirect(f"/employees/{employee.employee_id}")
+    else:
+        confirm_password = employee.password
+        confirm_email = employee.email
+        employee_ids = employee.employee_id
+
+
+        data = {
+
+        'email' : email,
+        'password' : password,
+        'employee_ids' : employee_ids,
+        'employee' : confirm_email,
+        'confirm_password' : confirm_password,
+        'confirm_email' : employee.email,
+        }
+
+   
+
+    return jsonify(data)
+
+
+
+# @app.route("/login", methods=['POST'])
+# def login_process():
+#     """Process login."""
+
+#     # Get form variables
+#     email = request.form["email"]
+#     password = request.form["password"]
+#     employee = Employee.query.filter_by(email=email).first()
+
+
+
+#     if not employee:
+#         flash("No such employee")
+#         return redirect("/register")
+
+#     if employee.password != password:
+#         print(employee.password)
+#         print(password)
+#         flash("Incorrect password")
+#         return redirect("/login")
+
+#     session["employee_id"] = employee.employee_id
+
+#     flash("You are successfully log in")
+#     return redirect(f"/employees/{employee.employee_id}")
+
 
 @app.route("/logout")
 def log_out():
@@ -208,39 +255,34 @@ def kidsappbox_game(employee_id):
     employee = Employee.query.get(employee_id)
     """ make a list of employeeis game"""
     game_list=[]
-  
+    id_list=[]  
 
     for game in games:
         if [game.game_name, game.image] not in game_list:
 
             game_list.append([game.game_name, game.image])
-
-    gamename= game.game_name
+           
 
    
 
-    return render_template("kidsappbox.html", games=games, employee=employee, gamename=gamename)
+    return render_template("kidsappbox.html", games=games, employee=employee)
 
 
 
 
 
-@app.route("/game-data/<game_id>")
+@app.route("/game-data/<int:game_id>")
 def kidsappbox_process(game_id):
 
-
-    # gamename = request.form["game_name"]
-    # country = request.form["country_type"]
-    # store = request.form["store_type"]
-
-    store = "itunes"
+   
     country = "US"
     
     game = Game.query.get(game_id)
+    store = game.store
+
     # games = db.session.query(Game).join(EmployeeGame).filter(EmployeeGame.employee_id == employee_id).filter(Game.store == store).filter(Game.game_name == gamename).all()
-
     req_params = {"country": country}
-
+    
     # Request URL
     url = f"https://api.appmonsta.com/v1/stores/{store}/details/{game.app_id}.json" 
     # 'all_histogram': {'1': 15, '3': 2, '2': 4, '5': 20, '4': 8}
@@ -253,9 +295,10 @@ def kidsappbox_process(game_id):
                             params=req_params,
                             headers=headers,
                             stream=True)
-    # import pprint
-    # pprint.pprint(response.json())
+
     game_data = response.json()
+
+    print(game_data.get('all_histogram'))
     if game_data.get('all_histogram'):
 
         data_dict = {
@@ -273,13 +316,14 @@ def kidsappbox_process(game_id):
                             "hoverBackgroundColor": [
                                 "#FF6384",
                                 "#36A2EB",
-                                "#FFCE56"
-                                "purple"
+                                "#FFCE56",
+                                "purple",
                                 "yellow"
                             ]
                         }]
                 }
         return jsonify(data_dict)
+
     else:
         return jsonify('No data for this game')
   

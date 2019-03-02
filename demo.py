@@ -9,7 +9,7 @@ from flask import jsonify
 # Request Parameters
 store = "android"       # Could be either "android" or "itunes".
 country_code = "US"     # Two letter country code.
-app_id = "com.androbaby.firstwordsforbaby" # Unique app identifier (bundle ID).
+app_id = "com.androbaby.game2048" # Unique app identifier (bundle ID).
 
 req_params = {"country": country_code}
 
@@ -34,7 +34,7 @@ for line in response.iter_lines():# Load json object and print it out
   json_record = json.loads(line)
   games = json_record['all_histogram']
   rating = json_record['all_rating']
-
+  print(json_record['all_histogram'])
   print(rating)
 
 key_list=[]
