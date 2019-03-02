@@ -49,6 +49,26 @@
         console.log(gameId);
         console.log(evt.target);
 
+        // data = {
+        //     country_type : country, 
+        //     store_type : store
+        // }
+
+        // $.get(`/game-data/${gameId}`, data, (data) => {
+        //     if (data === 'No data for this game') {
+        //         $(`#legend-${gameId}`).append('No data');
+        //     } else {
+        //         const ctx = $(`#chart-${gameId}`).get(0).getContext('2d');
+        //         const donutChart = new Chart(ctx, {
+        //             type: 'doughnut',
+        //             data: data,
+        //             options: { responsive: true,
+        //                        maintainAspectRatio: false
+        //                     }
+        //         });
+        //         $(`#legend-${gameId}`).html(donutChart.generateLegend());
+        //     }
+
         $.get(`/game-data/${gameId}`, data => {
             if (data === 'No data for this game') {
                 $(`#legend-${gameId}`).append('No data');

@@ -274,7 +274,8 @@ def kidsappbox_game(employee_id):
 @app.route("/game-data/<int:game_id>")
 def kidsappbox_process(game_id):
 
-   
+    # store = request.form["store_type"]
+    # country_code = request.form["country_type"]
     country = "US"
     
     game = Game.query.get(game_id)
