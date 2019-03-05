@@ -32,15 +32,15 @@
               	<button type="submit" class="btn btn primary">Search</button>
             </form>
         </div>
-        <div  class="game-chart">
-            <canvas  id="chart-{{ game.game_id }}">
+        <div style="width: 200px; height: 200px;" class="game-chart">
+            <canvas id="chart-{{ game.game_id }}">
                 
             </canvas>
             <div id="legend-{{ game.game_id }}"></div>
         </div>
     </div>
+    
 {% endfor %}
-  <script src="https://code.jquery.com/jquery.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
   <script>
     $('.game-search-form').on('submit', (evt) => {
@@ -49,25 +49,28 @@
         console.log(gameId);
         console.log(evt.target);
 
-        // data = {
-        //     country_type : country, 
-        //     store_type : store
-        // }
+    //     const country = $('#country_type_field');
+    //     const store = $('#store_type_field');
 
-        // $.get(`/game-data/${gameId}`, data, (data) => {
-        //     if (data === 'No data for this game') {
-        //         $(`#legend-${gameId}`).append('No data');
-        //     } else {
-        //         const ctx = $(`#chart-${gameId}`).get(0).getContext('2d');
-        //         const donutChart = new Chart(ctx, {
-        //             type: 'doughnut',
-        //             data: data,
-        //             options: { responsive: true,
-        //                        maintainAspectRatio: false
-        //                     }
-        //         });
-        //         $(`#legend-${gameId}`).html(donutChart.generateLegend());
-        //     }
+    //     data = {
+    //         country_type : country, 
+    //         store_type : store
+    //     }
+
+    //     $.get(`/game-data/${gameId}`, data, (data) => {
+    //         if (data === 'No data for this game') {
+    //             $(`#legend`).append('No data');
+    //         } else {
+    //             const ctx = $(`#chart`).get(0).getContext('2d');
+    //             const donutChart = new Chart(ctx, {
+    //                 type: 'doughnut',
+    //                 data: data,
+    //                 options: { responsive: true,
+    //                            maintainAspectRatio: false
+    //                         }
+    //             });
+    //             $(`#legend-${gameId}`).html(donutChart.generateLegend());
+    //         }
 
         $.get(`/game-data/${gameId}`, data => {
             if (data === 'No data for this game') {
@@ -78,7 +81,7 @@
                     type: 'doughnut',
                     data: data,
                     options: { responsive: true,
-                               maintainAspectRatio: false
+                               // maintainAspectRatio: false
                             }
                 });
                 $(`#legend-${gameId}`).html(donutChart.generateLegend());

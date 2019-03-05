@@ -35,7 +35,7 @@ function ticked(e) {
         .attr("cy", function(d) { return d.y; });
 }
 
-var colorCircles = d3.scaleOrdinal(d3.schemeCategory10);
+var colorCircles = d3.scaleOrdinal(d3.schemeCategory20);
 
 var scaleRadius = d3.scaleLinear()
             .domain([d3.min(data, function(d) { return +d.rank; }),
@@ -66,18 +66,18 @@ var node = svgContainer.selectAll("circle")
               .enter()
               .append("circle")
               .attr('r', function(d) { return scaleRadius(d.rank)})
-              .style("fill", function(d) { return colorCircles(d.rank)})
+              .style("fill", function(d) { return colorCircles(d.name)})
               .attr('transform', 'translate(' + [800 / 2, 1000 / 2] + ')')
               .on("mouseover", function(d) {
-                   tooltip.html("app name = " +d.name+"<br/>"+"rank = "+d.rank+"<br/>"+"average rating = "+d.rating+"<br/>");
+                   tooltip.html("rank = "+d.rank+"<br/>"+"average rating = "+d.rating+"<br/>");
                    return tooltip.style("visibility", "visible");
               })
               .on("mousemove", function(){
                   return tooltip.style("top", (d3.event.pageY-       10)+"px").style("left",(d3.event.pageX+10)+"px");
               })
 
-  // node.append("text")
-  //     .attr("x", 75)
-  //     .attr("y", 75)
-  //     .attr("dy", "0.35em")
-  //     .text(function(d) { return d.name } );
+    node.append("text")
+            .attr("x", 75)
+            .attr("y", 75)
+            .attr("dy", "0.35em")
+            .text(function(d) { return d.name } );

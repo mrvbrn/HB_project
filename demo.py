@@ -37,13 +37,4 @@ for line in response.iter_lines():# Load json object and print it out
   print(json_record['all_histogram'])
   print(rating)
 
-key_list=[]
-value_list=[]
-for key, value in games.items():
-    key_list.append(key)
-    print(key)
-    value_list.append(value)
-
-print(key_list)
-print(value_list)
 

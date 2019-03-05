@@ -75,14 +75,102 @@
     </tr>
     </table>
   </div>
-
-<script src="http://code.jquery.com/jquery.js"></script>
+   <div style="width: 200px; height: 200px;" class="game-chart">
+            <canvas id="chart">
+                
+            </canvas>
+            <div id="legend"></div>
+        </div>
+    </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
 <script type="text/javascript" src="/static/any-games.js"></script>
 <script type="text/javascript">
+  // $.ajax({
+  //   type:'POST',
+  //   url :"/details_any_games",
+  // })
+   
   $("#search-form-button").on('click', (evt) => {
       evt.preventDefault();
       searchGames();
+      searchRating();
+       });
+
+    function searchRating(){
+
+      const country = $("#country_type_field").val();
+      const store = $("#store_type_field").val();
+      const app_id =  $("#app_id_type_field").val();
+
+      const formData = {
+                country_type: country,
+                store_type: store,
+                app_id_type: app_id
+
+      };
+    
+     
+
+    
+
+      $.post(`/details_any_games`, formData, data => {
+        // throw 'break';
+        const histogram = data.all_histogram;
+        const ctx = $(`#chart`).get(0).getContext('2d');
+        const donutChart = new Chart(ctx, {
+          type: 'doughnut',
+          data: {
+            datasets: [{
+              data: Object.values(histogram),
+              backgroundColor: [
+                "#FF6384",
+                "#36A2EB",
+                "#FFCE56",
+                "purple",
+                "yellow"
+              ],
+              "hoverBackgroundColor": [
+                "#FF6384",
+                 "#36A2EB",
+                 "#FFCE56",
+                 "purple",
+                 "yellow"
+              ],
+            }],
+            labels: Object.keys(histogram),
+          },
+          options: { 
+            responsive: true,
+            // maintainAspectRatio: false
+          }
+      });
+              
+      $(`#legend`).html(donutChart.generateLegend());
+                
+              
+           
     });
+  }
+    function showResults(json_record) {
+
+  $('#app_name').html(json_record["app_name"]);
+  $('#price').html(json_record["price"]);
+  $('#genre').html(json_record["genre"]);
+}
+
+
+function searchGames() {
+
+    let formInputs = {
+        "country_type": $("#country_type_field").val(),
+        "store_type": $("#store_type_field").val(),
+        "app_id_type": $("#app_id_type_field").val()
+    };
+
+
+    $.post("/details_any_games", formInputs, showResults);
+}
+   
 </script>
 
 

@@ -46,8 +46,6 @@ def login_process():
     email = request.form["email_info"]
     password = request.form["password_info"]
     employee = Employee.query.filter_by(email=email).first()
-    # confirm_password = employee.password
-    # confirm_email = employee.email
   
 
     if not employee:
@@ -78,34 +76,6 @@ def login_process():
    
 
     return jsonify(data)
-
-
-
-# @app.route("/login", methods=['POST'])
-# def login_process():
-#     """Process login."""
-
-#     # Get form variables
-#     email = request.form["email"]
-#     password = request.form["password"]
-#     employee = Employee.query.filter_by(email=email).first()
-
-
-
-#     if not employee:
-#         flash("No such employee")
-#         return redirect("/register")
-
-#     if employee.password != password:
-#         print(employee.password)
-#         print(password)
-#         flash("Incorrect password")
-#         return redirect("/login")
-
-#     session["employee_id"] = employee.employee_id
-
-#     flash("You are successfully log in")
-#     return redirect(f"/employees/{employee.employee_id}")
 
 
 @app.route("/logout")
@@ -299,7 +269,7 @@ def kidsappbox_process(game_id):
 
     game_data = response.json()
 
-    print(game_data.get('all_histogram'))
+    # print(game_data.get('all_histogram'))
     if game_data.get('all_histogram'):
 
         data_dict = {
@@ -367,13 +337,12 @@ def details_any_games():
     """Show the form"""
 
     return render_template("details_any_games.html")
-
+  
 
 
 @app.route("/details_any_games", methods=['POST'])
 def show_details():
-    #import pdb; pdb.set_trace()
-    """select country, store and App_id"""
+
     country = request.form["country_type"]
     store = request.form["store_type"]
     app_id = request.form["app_id_type"]
