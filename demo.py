@@ -6,35 +6,38 @@ from flask import jsonify
 # Request Parameters
 
 
-# Request Parameters
-store = "android"       # Could be either "android" or "itunes".
-country_code = "US"     # Two letter country code.
-app_id = "com.androbaby.game2048" # Unique app identifier (bundle ID).
+"""API_KEY and password"""
 
-req_params = {"country": country_code}
-
-# Auth Parameters
 username = os.environ.get('USERNAME')
-password = os.environ.get('PASSWORD')       # Password can be anything.
+password = os.environ.get('PASSWORD')
 
-url = "https://api.appmonsta.com/v1/stores/%s/details/%s.json" % (store, app_id)
+store = "android"
+country_code = "US"
+date = "2019-03-04" # Unique app identifier (bundle ID).
 
-# This header turns on compression to reduce the bandwidth usage and transfer time.
+req_params = {"date" : date,
+                  "country" : country_code}
+
+request_url = request_url = f"https://api.appmonsta.com/v1/stores/{store}/rankings.json" 
 headers = {'Accept-Encoding': 'deflate, gzip'}
 
-# Python Main Code Sample
-response = requests.get(url,
-                        auth=(username, password),
-                        params=req_params,
-                        headers=headers,
-                        stream=True)
+    # Python Main Code Sample
+response = requests.get(request_url,
+                            auth=(username, password),
+                            params=req_params,
+                            headers=headers,
+                            stream=True)
 
-print (response.status_code)
-for line in response.iter_lines():# Load json object and print it out
-  json_record = json.loads(line)
-  games = json_record['all_histogram']
-  rating = json_record['all_rating']
-  print(json_record['all_histogram'])
-  print(rating)
+games = []
+games_seen = set()
+for line in response.iter_lines():
+    """Load json object and print it out"""
 
+    game_dict = json.loads(line)
+    if game_dict['app_id'] not in games_seen:
+        games.append(game_dict)
+        games_seen.add(game_dict['app_id'])
+
+game = sorted(games, key=lambda i: i['rank'])[:20]
+print(game)
 

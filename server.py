@@ -2,6 +2,7 @@ import os
 import pprint
 import requests
 import json
+import time
 from flask import Flask, render_template, request, flash, redirect, session, jsonify
 from model import connect_to_db, db, Employee, Game, EmployeeGame
 from flask_debugtoolbar import DebugToolbarExtension
@@ -32,10 +33,7 @@ def homepage():
 @app.route('/login', methods=['GET'])
 def login_form():
     """Show login form."""
-      # Get form variables
-    
-
-
+     
     return render_template("login.html")
 
 
@@ -78,13 +76,13 @@ def login_process():
     return jsonify(data)
 
 
-@app.route("/logout")
-def log_out():
-    """log out of employee's account"""
-
-    session.clear()
-
-    return render_template("log_out.html")
+@app.route('/logout')
+def logout():
+    """Log out."""
+    
+    # del session["employee_id"]
+    flash("Logged Out.")
+    return render_template("sign_out.html")
 
 
 
@@ -126,7 +124,7 @@ def register_process():
             employee_update.email = email
             employee_update.password = password
 
-            flash(f" Employee {email} added.")
+            flash(f" Employee {fname} added.")
            
             db.session.commit()
 
@@ -164,15 +162,10 @@ def employee_detail(employee_id):
     return render_template("employee.html", employee=employee)
 
 
-
-
-
 @app.route("/top_twenty_games")
 def top_games():
 
     return render_template("top_games.html")
-
-
 
 
 @app.route("/top_twenty_games", methods=['POST'])
@@ -207,14 +200,9 @@ def top_games_process():
             games_seen.add(game_dict['app_id'])
 
     game = sorted(games, key=lambda i: i['rank'])[:20]
-    
-
-
 
 
     return render_template("top_games.html", json_record=game, store=store, country=country_code)          
-
-
 
 
 @app.route("/employees/<int:employee_id>/kidsappbox_game", methods=['GET'])
@@ -225,27 +213,25 @@ def kidsappbox_game(employee_id):
     employee = Employee.query.get(employee_id)
     """ make a list of employeeis game"""
     game_list=[]
-    id_list=[]  
+    id_list=[] 
+    
 
     for game in games:
         if [game.game_name, game.image] not in game_list:
 
             game_list.append([game.game_name, game.image])
-           
 
+           
+    app_id = game.app_id
    
 
-    return render_template("kidsappbox.html", games=games, employee=employee)
-
-
-
+    return render_template("kidsappbox.html", games=games, employee=employee, app_id=app_id)
+  
 
 
 @app.route("/game-data/<int:game_id>")
 def kidsappbox_process(game_id):
 
-    # store = request.form["store_type"]
-    # country_code = request.form["country_type"]
     country = "US"
     
     game = Game.query.get(game_id)
@@ -319,15 +305,12 @@ def details_of_games(country, store, app_id):
                             headers=headers,
                             stream=True)
 
-    # print (response.status_code)
-
     games=[]
 
 
     for line in response.iter_lines():
     # Load json object and print it out
        json_record = json.loads(line)
-       print(json_record)
        games.append(json_record)
     return render_template("details_of_games.html", json_record=games)
 
@@ -365,9 +348,9 @@ def show_details():
    
     for line in response.iter_lines():
     # Load json object and print it out
-       json_record = json.loads(line)
+       single_app_record = json.loads(line)
     
-    return jsonify(json_record)
+    return jsonify(single_app_record)
 
 
 

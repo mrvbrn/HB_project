@@ -1,7 +1,7 @@
 // instantiate the chart
 var bubbleChart = function () {
-    var width = 1000;
-    var height = 400;
+    var width = 1900;
+    var height = 1000;
     function chart(selection){
         // we gonna get here
     }
@@ -25,7 +25,7 @@ var bubbleChart = function () {
 var data = getDataForRankingVisualization();
 
 var simulation = d3.forceSimulation(data)
- .force("charge", d3.forceManyBody().strength([-350]))
+ .force("charge", d3.forceManyBody().strength([-1000]))
  .force("x", d3.forceX())
  .force("y", d3.forceY())
  .on("tick", ticked);
@@ -40,7 +40,7 @@ var colorCircles = d3.scaleOrdinal(d3.schemeCategory20);
 var scaleRadius = d3.scaleLinear()
             .domain([d3.min(data, function(d) { return +d.rank; }),
                     d3.max(data, function(d) { return +d.rank; })])
-            .range([50, 5]);
+            .range([60, 30]);
 
 var tooltip = d3.select("body")
  .append("div")
@@ -55,13 +55,12 @@ var tooltip = d3.select("body")
  .style("width", "400px")
  .text("");
 
-
 let svgContainer = d3.select("body")
                      .append("svg")
-                     .attr("width", 800)
+                     .attr("width", 1000)
                      .attr("height", 1000);
 
-var node = svgContainer.selectAll("circle")
+var node = svgContainer.selectAll("g")
               .data(data)
               .enter()
               .append("circle")

@@ -1,7 +1,14 @@
 {% extends 'base.html' %}
 {% block content %}
+<div>
+    <form action="/", method='GET'>
+       <button type="submit" id="log-out-button">Log Out</button>
+   </form>
+</div>
 
 {% for game in games %}
+
+
     <div class="game">
         <div class="game-info">
             <h4 id="game_name" name="game_name">{{ game.game_name }}</h4> 
@@ -15,21 +22,21 @@
                 method="GET"
                 data-gameid="{{ game.game_id }}"
             >
-                <select id="store_type_field" name="store_type" class="store_control">
-            		<option value="android" id="select-store">android</option>
-            		<option value="itunes" id="select-store">itunes</option>
+                <!-- <select id="store_type_field" name="store_type" class="store_control">
+                    <option value="android" id="select-store">android</option>
+                    <option value="itunes" id="select-store">itunes</option>
                 </select>
                 <select id="country_type_field" name="country_type" class="country_control">
-            		<option value="AU" id = "select-country">Australia</option>
-            		<option value="CAN" id = "select-country">Canada</option>
-            		<option value="CHN" id = "select-country">Chinese</option>
-            		<option value="FR" id = "select-country">France</option>
-            		<option value="DE" id = "select-country">Germany</option>
-            		<option value="GB" id = "select-country">United Kingdom</option>
-            		<option value="US" id = "select-country">United State</option>
-                </select>
+                    <option value="AU" id = "select-country">Australia</option>
+                    <option value="CAN" id = "select-country">Canada</option>
+                    <option value="CHN" id = "select-country">Chinese</option>
+                    <option value="FR" id = "select-country">France</option>
+                    <option value="DE" id = "select-country">Germany</option>
+                    <option value="GB" id = "select-country">United Kingdom</option>
+                    <option value="US" id = "select-country">United State</option>
+                </select> -->
        
-              	<button type="submit" class="btn btn primary">Search</button>
+                <button type="submit" class="btn btn primary">See Games Rating</button>
             </form>
         </div>
         <div style="width: 200px; height: 200px;" class="game-chart">
@@ -43,34 +50,21 @@
 {% endfor %}
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
   <script>
+
+   $(document).ready(function(){
+      $('#log-out-button').on('click', (evt) => {
+       evt.preventDefault();
+       console.log('you are succesfully log out')
+       window.location.href = "/logout"
+        });
+    });
+    
+
     $('.game-search-form').on('submit', (evt) => {
         evt.preventDefault();
         const gameId = $(evt.target).data('gameid');
         console.log(gameId);
         console.log(evt.target);
-
-    //     const country = $('#country_type_field');
-    //     const store = $('#store_type_field');
-
-    //     data = {
-    //         country_type : country, 
-    //         store_type : store
-    //     }
-
-    //     $.get(`/game-data/${gameId}`, data, (data) => {
-    //         if (data === 'No data for this game') {
-    //             $(`#legend`).append('No data');
-    //         } else {
-    //             const ctx = $(`#chart`).get(0).getContext('2d');
-    //             const donutChart = new Chart(ctx, {
-    //                 type: 'doughnut',
-    //                 data: data,
-    //                 options: { responsive: true,
-    //                            maintainAspectRatio: false
-    //                         }
-    //             });
-    //             $(`#legend-${gameId}`).html(donutChart.generateLegend());
-    //         }
 
         $.get(`/game-data/${gameId}`, data => {
             if (data === 'No data for this game') {
@@ -80,17 +74,14 @@
                 const donutChart = new Chart(ctx, {
                     type: 'doughnut',
                     data: data,
-                    options: { responsive: true,
-                               // maintainAspectRatio: false
-                            }
+                    options: { responsive: true}
                 });
-                $(`#legend-${gameId}`).html(donutChart.generateLegend());
+                // $(`#legend-${gameId}`).html(donutChart.generateLegend());
             }
         });
-
     });
  
   </script>
-
-
 {% endblock %}
+
+

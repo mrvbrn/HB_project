@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
 <style>
   table {
       font-family: arial, sans-serif;
@@ -18,7 +19,11 @@
       background-color: #dddddd;
       }
 </style>
-
+<div>
+    <form action="/", method='GET'>
+       <button type="submit" id="log-out-button">Log Out</button>
+   </form>
+</div>
 <h2>search details of  games</h2>
 <form id="select_form" method="POST">
   <div class="form_group">
@@ -83,13 +88,15 @@
         </div>
     </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
-<script type="text/javascript" src="/static/any-games.js"></script>
 <script type="text/javascript">
-  // $.ajax({
-  //   type:'POST',
-  //   url :"/details_any_games",
-  // })
-   
+$(document).ready(function(){
+  $('#log-out-button').on('click', (evt) => {
+    evt.preventDefault();
+    console.log('you are succesfully log out')
+    window.location.href = "/logout"
+  });
+});
+ 
   $("#search-form-button").on('click', (evt) => {
       evt.preventDefault();
       searchGames();

@@ -4,6 +4,12 @@
 
 
 <style>
+body {
+  padding-top: 20px;
+  font: 12px sans-serif;
+  font-weight: bold;
+}
+
 table {
   font-family: arial, sans-serif;
   border-collapse: collapse;
@@ -19,7 +25,13 @@ td, th {
 tr:nth-child(even) {
   background-color: #dddddd;
 }
+
 </style>
+<div>
+    <form action="/", method='GET'>
+       <button type="submit" id="log-out-button">Log Out</button>
+   </form>
+</div>
 
 <h1>top twenty games</h1>
 
@@ -27,23 +39,19 @@ tr:nth-child(even) {
   <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
 <form action="/top_twenty_games" method ="POST" id = "search_game">
 
-<select name="store">
-  <option value="android" id = "select-store">Android</option>
-  <option value="itunes" id = "select-store">iOS</option>
-</select>
-<select name="country">
-	 <option value="AU" id = "select-country">Australia</option>
-	 <option value="CAN" id = "select-country">Canada</option>
-	 <option value="CHN" id = "select-country">Chinese</option>
-	 <option value="FR" id = "select-country">France</option>
-	 <option value="DE" id = "select-country">Germany</option>
-	 <option value="GB" id = "select-country">United Kingdom</option>
-	 <option value="US" id = "select-country">United State</option>
-</select>
-
-
-
-
+  <select name="store">
+    <option value="android" id = "select-store">android</option>
+    <option value="itunes" id = "select-store">itunes</option>
+  </select>
+  <select name="country">
+     <option value="AU" id = "select-country">Australia</option>
+     <option value="CAN" id = "select-country">Canada</option>
+     <option value="CHN" id = "select-country">Chinese</option>
+     <option value="FR" id = "select-country">France</option>
+     <option value="DE" id = "select-country">Germany</option>
+     <option value="GB" id = "select-country">United Kingdom</option>
+     <option value="US" id = "select-country">United State</option>
+  </select>
 
 <label for="start">Start date:</label>
 
@@ -53,29 +61,26 @@ tr:nth-child(even) {
 
 </form>
 
-  
+  <table >
 
+    <tr>
+      <th>App Id</th> 
+      <th>App Name</th>
+      <th>Average Rating</th>
+      <th>Price</th> 
+    </tr>
+     {% for r in json_record %}
+    <tr>
+     
+      <td><a href="/details_of_games/{{country}}/{{store}}/{{r['app_id']}}">{{r["app_id"]}}</a></td>
+      <td>{{r["app_name"]}}</td>
+      <td>{{r["avg_rating"]}}</td>
+      <td>{{r["price"]}}</td>
+      <td>{{r["rank"]}}</td>
 
-<table >
+     
+    </tr>
 
-  <tr>
-    <th>App Id</th> 
-    <th>App Name</th>
-    <th>Average Rating</th>
-    <th>Price</th> 
-  </tr>
-   {% for r in json_record %}
-  <tr>
-   
-    <td><a href="/details_of_games/{{country}}/{{store}}/{{r['app_id']}}">{{r["app_id"]}}</a></td>
-    <td>{{r["app_name"]}}</td>
-    <td>{{r["avg_rating"]}}</td>
-    <td>{{r["price"]}}</td>
-    <td>{{r["rank"]}}</td>
-
-   
-  </tr>
-  
   {% endfor %}
 </table>
 <br><br>
@@ -88,10 +93,18 @@ tr:nth-child(even) {
       {name: "{{ r['app_name'] }}", rank: "{{ r['rank'] }}", rating:"{{ r['avg_rating'] }}"},
      {% endfor %}];
   }
+
+  $(document).ready(function(){
+  $('#log-out-button').on('click', (evt) => {
+    evt.preventDefault();
+    console.log('you are succesfully log out')
+    window.location.href = "/logout"
+  });
+});
 </script>
 
 
-<div class="chart-example" id="chart"><svg></svg></div>
+<div style="class="chart-example" id="chart"><svg></svg></div>
 
 
   <script src="https://d3js.org/d3.v4.min.js"></script>
