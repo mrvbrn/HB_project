@@ -76,15 +76,22 @@ def login_process():
     return jsonify(data)
 
 
+@app.route('/login_employee/<int:employee_id>')
+def login_employee(employee_id):
+
+    session["employee_id"] = employee_id 
+
+    return redirect(f'/employees/{employee_id}')
+   
+
+
 @app.route('/logout')
 def logout():
     """Log out."""
     
-    # del session["employee_id"]
-    flash("Logged Out.")
-    return render_template("sign_out.html")
-
-
+    del session["employee_id"]
+    flash("You are succesfully log out.")
+    return redirect("/")
 
 
 @app.route("/register", methods=['GET'])
@@ -123,9 +130,11 @@ def register_process():
             employee_update.lname = lname
             employee_update.email = email
             employee_update.password = password
+            """create new employee"""
 
-            flash(f" Employee {fname} added.")
-           
+            new_employee = Employee(employee_id= employee_id, fname=fname, lname=lname, email=email, password=password)
+            flash(f" Employee {fname} {lname} added.")
+            db.session.add(new_employee)
             db.session.commit()
 
 
@@ -172,9 +181,9 @@ def top_games():
 def top_games_process():
     """Show top twenty games"""
 
-    store = request.form["store"]
-    country_code = request.form["country"]
-    date = request.form["date"]
+    store = request.form["store_type"]
+    country_code = request.form["country_type"]
+    date = request.form["date_type"]
 
     req_params = {"date" : date,
                   "country" : country_code}
@@ -192,15 +201,21 @@ def top_games_process():
     games = []
     games_seen = set()
     for line in response.iter_lines():
-        """Load json object and print it out"""
+       
+        """  if api don't give data for selected time and country display no data""" 
 
         game_dict = json.loads(line)
-        if game_dict['app_id'] not in games_seen:
-            games.append(game_dict)
-            games_seen.add(game_dict['app_id'])
-
-    game = sorted(games, key=lambda i: i['rank'])[:20]
-
+        if game_dict:
+            try:
+                if game_dict['app_id'] not in games_seen:
+                    games.append(game_dict)                      # remove repetetion     
+                    games_seen.add(game_dict['app_id'])
+                    game = sorted(games, key=lambda i: i['rank'])[:20]   # sorted by rank
+                
+           
+            except KeyError:
+                game = 'No Data'
+           
 
     return render_template("top_games.html", json_record=game, store=store, country=country_code)          
 
@@ -252,17 +267,20 @@ def kidsappbox_process(game_id):
                             params=req_params,
                             headers=headers,
                             stream=True)
-
+    """ details of single app"""
     game_data = response.json()
 
-    # print(game_data.get('all_histogram'))
-    if game_data.get('all_histogram'):
+    """sort dict by the key"""
+
+    sorted_dict = dict(sorted((game_data.get('all_histogram')).items()))
+   
+    if sorted_dict:
 
         data_dict = {
-                    "labels": list(game_data['all_histogram'].keys()),
+                    "labels": list(sorted_dict.keys()),
                     "datasets": [
                         {
-                            "data": list(game_data['all_histogram'].values()),
+                            "data": list(sorted_dict.values()),
                             "backgroundColor": [
                                 "#FF6384",
                                 "#36A2EB",

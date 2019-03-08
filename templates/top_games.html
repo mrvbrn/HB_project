@@ -37,29 +37,27 @@ tr:nth-child(even) {
 
  
   <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
-<form action="/top_twenty_games" method ="POST" id = "search_game">
+    <form action="/top_twenty_games" method ="POST" id = "search_game">
 
-  <select name="store">
-    <option value="android" id = "select-store">android</option>
-    <option value="itunes" id = "select-store">itunes</option>
-  </select>
-  <select name="country">
-     <option value="AU" id = "select-country">Australia</option>
-     <option value="CAN" id = "select-country">Canada</option>
-     <option value="CHN" id = "select-country">Chinese</option>
-     <option value="FR" id = "select-country">France</option>
-     <option value="DE" id = "select-country">Germany</option>
-     <option value="GB" id = "select-country">United Kingdom</option>
-     <option value="US" id = "select-country">United State</option>
-  </select>
+      <select id="store_type_field" name="store_type" class="store_control">
+          <option value="android" id = "select-store">android</option>
+          <option value="itunes" id = "select-store">itunes</option>
+      </select>
+      <select id="country_type_field" name="country_type" class="country_control">
+           <option value="AU" id = "select-country">Australia</option>
+           <option value="CAN" id = "select-country">Canada</option>
+           <option value="CHN" id = "select-country">Chinese</option>
+           <option value="FR" id = "select-country">France</option>
+           <option value="DE" id = "select-country">Germany</option>
+           <option value="GB" id = "select-country">United Kingdom</option>
+           <option value="US" id = "select-country">United State</option>
+      </select>
 
-<label for="start">Start date:</label>
+        <label for="start">Start date:</label>
 
-<input type="date"  name="date"required>
-<button id ="search">Search</button>
-
-
-</form>
+        <input type="date"  name="date_type" required id="data_type_field">
+        <button id ="search">Search</button>
+    </form>
 
   <table >
 
@@ -69,7 +67,11 @@ tr:nth-child(even) {
       <th>Average Rating</th>
       <th>Price</th> 
     </tr>
-     {% for r in json_record %}
+     {% if json_record == 'No Data' %}
+            <h1>No Data for this country and date. Please select another country and date</h1>
+     {% else %}
+          {% for r in json_record %}
+     
     <tr>
      
       <td><a href="/details_of_games/{{country}}/{{store}}/{{r['app_id']}}">{{r["app_id"]}}</a></td>
@@ -82,17 +84,61 @@ tr:nth-child(even) {
     </tr>
 
   {% endfor %}
+  {% endif %}
 </table>
 <br><br>
 
 
   
 <script>
+
   function getDataForRankingVisualization() {
     return [  {% for r in json_record %}
       {name: "{{ r['app_name'] }}", rank: "{{ r['rank'] }}", rating:"{{ r['avg_rating'] }}"},
      {% endfor %}];
   }
+  var data = getDataForRankingVisualization();
+
+  $('#search_game').on('click', (e) => {
+      e.preventDefault();
+    }
+
+
+
+   // $('#search_game').on('click', (e) => {
+   //    e.preventDefault();
+
+   //    const country = $('#country_type_field').val();
+   //    const store = $('#store_type_field').val();
+   //    const date = $('#date_type_field').val();
+
+   //      const formData = {
+   //          country_type = country,
+   //          store_type = store,
+   //          date_type = date
+
+   //       };
+
+   //      $.post('/top_twenty_games', formData, data => {
+   //         if (data === 'No Data'){
+   //            console.log("Hello");
+   //            window.alert("No Data for this date. Please enter another date");
+   //            window.location.href = "/top_games.html"
+   //          }
+   //        else {
+   //          for (var game in data){
+   //            ('#app_id_type').html(game["app_id"]);
+   //            ('#app_name_type').html(game["app_name"])
+
+   //          }
+   //        }
+
+   //      });
+
+   //    });
+    
+   
+
 
   $(document).ready(function(){
   $('#log-out-button').on('click', (evt) => {

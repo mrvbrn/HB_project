@@ -31,18 +31,18 @@
         $.post('/login.json', data, (data) => {
 
             if (email !== data['confirm_email']){
-                console.log("no employee");
+                // console.log("no employee");
                 window.alert("no such employee");
                 window.location.href = "/register"
                 
             }
             else if (password !== data['confirm_password']){
-                console.log("no password");
+                // console.log("no password");
                 window.alert("incorrect password");
                 
             }
             else {
-                window.location.href = "/employees/" + data["employee_ids"]
+                window.location.href = "/login_employee/" + data["employee_ids"]
    
             }
 
