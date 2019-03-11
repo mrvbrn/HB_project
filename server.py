@@ -41,11 +41,11 @@ def login_form():
 @app.route("/login.json", methods=['POST'])
 def login_process():
 
+
     email = request.form["email_info"]
     password = request.form["password_info"]
     employee = Employee.query.filter_by(email=email).first()
-  
-
+    
     if not employee:
 
         data = {
@@ -78,6 +78,8 @@ def login_process():
 
 @app.route('/login_employee/<int:employee_id>')
 def login_employee(employee_id):
+
+    """add employee to the session"""
 
     session["employee_id"] = employee_id 
 
@@ -112,10 +114,7 @@ def register_process():
     password = request.form["password"]
     confirm_password = request.form["confirm_password"]
 
-
-   
-
-    
+ 
 
     employee_update = Employee.query.filter(Employee.employee_id == employee_id).first()
 
@@ -171,15 +170,18 @@ def employee_detail(employee_id):
     return render_template("employee.html", employee=employee)
 
 
-@app.route("/top_twenty_games")
-def top_games():
+@app.route("/employees/<int:employee_id>/top_twenty_games", methods=['GET'])
+def top_games(employee_id):
 
-    return render_template("top_games.html")
+    employee= Employee.query.get(employee_id)
+
+    return render_template("top_games.html", employee=employee)
 
 
-@app.route("/top_twenty_games", methods=['POST'])
-def top_games_process():
+@app.route("/employees/<int:employee_id>/top_twenty_games", methods=['POST'])
+def top_games_process(employee_id):
     """Show top twenty games"""
+    employee= Employee.query.get(employee_id)
 
     store = request.form["store_type"]
     country_code = request.form["country_type"]
@@ -217,7 +219,7 @@ def top_games_process():
                 game = 'No Data'
            
 
-    return render_template("top_games.html", json_record=game, store=store, country=country_code)          
+    return render_template("top_games.html", json_record=game, store=store, country=country_code, employee=employee)          
 
 
 @app.route("/employees/<int:employee_id>/kidsappbox_game", methods=['GET'])
@@ -248,7 +250,6 @@ def kidsappbox_game(employee_id):
 def kidsappbox_process(game_id):
 
     country = "US"
-    
     game = Game.query.get(game_id)
     store = game.store
 
@@ -267,14 +268,16 @@ def kidsappbox_process(game_id):
                             params=req_params,
                             headers=headers,
                             stream=True)
-    """ details of single app"""
-    game_data = response.json()
+    
+    if response.status_code == 429:
+        return jsonify("You've exceeded the rate limit for the API you're trying to access")
+    elif response.status_code == 200:
+        """ details of single app"""
+        game_data = response.json()
 
-    """sort dict by the key"""
+        """sort dict by the key"""
 
-    sorted_dict = dict(sorted((game_data.get('all_histogram')).items()))
-   
-    if sorted_dict:
+        sorted_dict = dict(sorted((game_data.get('all_histogram')).items()))
 
         data_dict = {
                     "labels": list(sorted_dict.keys()),
@@ -298,9 +301,8 @@ def kidsappbox_process(game_id):
                         }]
                 }
         return jsonify(data_dict)
-
     else:
-        return jsonify('No data for this game')
+        return jsonify("No data for this game")
   
              
 
@@ -333,11 +335,11 @@ def details_of_games(country, store, app_id):
     return render_template("details_of_games.html", json_record=games)
 
 
-@app.route("/details_any_games", methods=['GET'])
-def details_any_games():
+@app.route("/employees/<int:employee_id>/details_any_games", methods=['GET'])
+def details_any_games(employee_id):
     """Show the form"""
-
-    return render_template("details_any_games.html")
+    employee = Employee.query.get(employee_id)
+    return render_template("details_any_games.html", employee=employee)
   
 
 
@@ -362,13 +364,23 @@ def show_details():
                             params=req_params,
                             headers=headers,
                             stream=True)
-
-   
-    for line in response.iter_lines():
-    # Load json object and print it out
-       single_app_record = json.loads(line)
     
-    return jsonify(single_app_record)
+    if response.status_code == 403:
+        return jsonify("No data for this country")
+    elif response.status_code == 404:
+        return jsonify("app id doesn't match")
+    elif response.status_code == 429:
+        return jsonify("You've exceeded the rate limit for the API you're trying to access")
+    else:
+
+        for line in response.iter_lines():
+        # Load json object and print it out
+            single_app_record = json.loads(line)
+            return jsonify(single_app_record)
+
+            
+    
+   
 
 
 

@@ -87,7 +87,8 @@ class EmployeeGame(db.Model):
 #####################################################################
 
 def example_data():
-    """sample data for testing"""
+    """sample dat9a for testing"""
+    db.create_all()
 
     #In case this is run more than once, empty out existing data
 
@@ -97,27 +98,33 @@ def example_data():
 
     # add sample employees, games and employeegames
 
-    leonard = Employee(employee_id="111", fname='Leonard', lname='Asby', email='leonard@gmail.com', password='test')
-    liz = Employee(employee_games="108", fname='Liz', lname='Asby', email='liz@gmail.com', password='test')
-    meggie = Employee(employee_games="104", fname='Meggie', lname='Asby', email='meggie@gmail.com', password='test')
+    leonard = Employee(employee_id=111, fname='Leonard', lname='Asby', email='leonard@gmail.com', password='test')
+    liz = Employee(employee_id= 108, fname='Liz', lname='Asby', email='liz@gmail.com', password='test')
+    meggie = Employee(employee_id= 104, fname='Meggie', lname='Asby', email='meggie@gmail.com', password='test')
 
-    game1 = Game(game_name = 'First Words for Baby', app_id = 'com.androbaby.firstwordsforbaby', store = "android", image = "/static/image/first_words.jpg")
-    game2 = Game(game_name = 'Kids Construction Game: Preschool', app_id = 'com.androbaby.kidsconstructiongame', store = "android", image = "/static/image/kids_construction.jpg")
-    game3 = Game(game_name = 'Kids Jigsaw Puzzles: Farm', app_id = '1272837891', store = "android", image = "/static/image/kids_farm.jpg")
+    db.session.add_all([leonard, liz, meggie])
+    db.session.commit()
 
-    employeegame1 = EmployeeGame(employee_id="111", game_id="1")
-    employeegame2 = EmployeeGame(employee_id="108", game_id="2")
-    employeegame3 = EmployeeGame(employee_id="103", game_id="29")
+    game1 = Game(game_id = 1, game_name = 'First Words for Baby', app_id = 'com.androbaby.firstwordsforbaby', store = "android", image = "/static/image/first_words.jpg")
+    game2 = Game(game_id = 2, game_name = 'Kids Construction Game: Preschool', app_id = 'com.androbaby.kidsconstructiongame', store = "android", image = "/static/image/kids_construction.jpg")
+    game3 = Game(game_id = 3, game_name = 'Kids Jigsaw Puzzles: Farm', app_id = '1272837891', store = "android", image = "/static/image/kids_farm.jpg")
 
-    db.session.add_all(leonard, liz, meggie, game1, game2, game3, employeegame1, employeegame2, employeegame3)
+    db.session.add_all([game1, game2, game3])
+    db.session.commit()
+
+    employeegame1 = EmployeeGame(employee_game_id = 1, employee_id=111, game_id=1)
+    employeegame2 = EmployeeGame(employee_game_id = 2, employee_id=108, game_id=2)
+    employeegame3 = EmployeeGame(employee_game_id = 3, employee_id=104, game_id=3)
+
+    db.session.add_all([employeegame1, employeegame2, employeegame3])
     db.session.commit()
 # Helper functions
 
-def connect_to_db(app):
+def connect_to_db(app, db_uri='postgresql:///employees'):
     """Connect the database to our Flask app."""
 
     # Configure to use our PostgreSQL database
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///employees'
+    app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.app = app
     db.init_app(app)

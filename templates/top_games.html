@@ -4,6 +4,16 @@
 
 
 <style>
+
+table tr {
+    counter-increment: rowNumber;
+}
+
+table tr td:first-child::before {
+    content: counter(rowNumber);
+    min-width: 1em;
+    margin-right: 0.5em;
+}
 body {
   padding-top: 20px;
   font: 12px sans-serif;
@@ -14,6 +24,7 @@ table {
   font-family: arial, sans-serif;
   border-collapse: collapse;
   width: 100%;
+  counter-reset: rowNumber;
 }
 
 td, th {
@@ -33,11 +44,15 @@ tr:nth-child(even) {
    </form>
 </div>
 
+<div>
+    <form action="/employees/{{employee.employee_id}}", method='GET'>
+       <button type="submit" id="previous-button">previous page</button>
+   </form>
+</div>
+
 <h1>top twenty games</h1>
 
- 
-  <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
-    <form action="/top_twenty_games" method ="POST" id = "search_game">
+    <form action="/employees/{{employee.employee_id}}/top_twenty_games" method ="POST" id = "search_game">
 
       <select id="store_type_field" name="store_type" class="store_control">
           <option value="android" id = "select-store">android</option>
@@ -54,107 +69,51 @@ tr:nth-child(even) {
       </select>
 
         <label for="start">Start date:</label>
-
         <input type="date"  name="date_type" required id="data_type_field">
         <button id ="search">Search</button>
     </form>
 
   <table >
 
-    <tr>
-      <th>App Id</th> 
-      <th>App Name</th>
-      <th>Average Rating</th>
-      <th>Price</th> 
-    </tr>
-     {% if json_record == 'No Data' %}
+      <tr>
+          <th>App Id</th> 
+          <th>App Name</th>
+          <th>Average Rating</th>
+          <th>Price</th> 
+      </tr>
+      {% if json_record == 'No Data' %}
             <h1>No Data for this country and date. Please select another country and date</h1>
-     {% else %}
+      {% else %}
           {% for r in json_record %}
      
-    <tr>
+      <tr>
      
-      <td><a href="/details_of_games/{{country}}/{{store}}/{{r['app_id']}}">{{r["app_id"]}}</a></td>
-      <td>{{r["app_name"]}}</td>
-      <td>{{r["avg_rating"]}}</td>
-      <td>{{r["price"]}}</td>
-      <td>{{r["rank"]}}</td>
+          <td><a href="/details_of_games/{{country}}/{{store}}/{{r['app_id']}}">{{r["app_id"]}}</a></td>
+          <td>{{r["app_name"]}}</td>
+          <td>{{r["avg_rating"]}}</td>
+          <td>{{r["price"]}}</td>
 
-     
-    </tr>
+      </tr>
 
-  {% endfor %}
-  {% endif %}
+          {% endfor %}
+      {% endif %}
 </table>
-<br><br>
-
-
   
-<script>
+<script >
 
-  function getDataForRankingVisualization() {
-    return [  {% for r in json_record %}
-      {name: "{{ r['app_name'] }}", rank: "{{ r['rank'] }}", rating:"{{ r['avg_rating'] }}"},
-     {% endfor %}];
-  }
-  var data = getDataForRankingVisualization();
+    $('#search_game').on('click', (e) => {
+        e.preventDefault();
+      }
 
-  $('#search_game').on('click', (e) => {
-      e.preventDefault();
-    }
-
-
-
-   // $('#search_game').on('click', (e) => {
-   //    e.preventDefault();
-
-   //    const country = $('#country_type_field').val();
-   //    const store = $('#store_type_field').val();
-   //    const date = $('#date_type_field').val();
-
-   //      const formData = {
-   //          country_type = country,
-   //          store_type = store,
-   //          date_type = date
-
-   //       };
-
-   //      $.post('/top_twenty_games', formData, data => {
-   //         if (data === 'No Data'){
-   //            console.log("Hello");
-   //            window.alert("No Data for this date. Please enter another date");
-   //            window.location.href = "/top_games.html"
-   //          }
-   //        else {
-   //          for (var game in data){
-   //            ('#app_id_type').html(game["app_id"]);
-   //            ('#app_name_type').html(game["app_name"])
-
-   //          }
-   //        }
-
-   //      });
-
-   //    });
-    
-   
-
-
-  $(document).ready(function(){
-  $('#log-out-button').on('click', (evt) => {
-    evt.preventDefault();
-    console.log('you are succesfully log out')
-    window.location.href = "/logout"
-  });
-});
+      
+    $(document).ready(function(){
+    $('#log-out-button').on('click', (evt) => {
+      evt.preventDefault();
+      console.log('you are succesfully log out')
+      window.location.href = "/logout"
+    });
+    });
 </script>
-
-
-<div style="class="chart-example" id="chart"><svg></svg></div>
-
-
-  <script src="https://d3js.org/d3.v4.min.js"></script>
-  <script src="/static/top-games.js"></script>
 
 
 

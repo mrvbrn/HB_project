@@ -22,19 +22,26 @@ class FlaskTestsBasic(unittest.TestCase):
 
 
     def test_register_page(self):
-        """Can teachers see registration form?"""
+        """Test register page"""
 
         result = self.client.get('/register')
         self.assertIn(b"Sign Up", result.data)
 
-    # def test_employee_page(self):
-    #     """Can students see registration form?"""
+    def login_page(self):
+      
 
-    #     result = self.client.post('/employees/<int:employee_id>')
-    #     self.assertIn(b"Welcome", result.data)
+        result = self.client.get('/login')
 
-    def test_student_log_in_page(self):
-        """Can student see log in page?"""
+        self.assertIn(b"Email Adress", result.data)
+
+    def test_top_games_page(self):
+        """Test top twenty game"""
+
+        result = self.client.get('/top_twenty_games')
+        self.assertIn(b"top twenty games", result.data)
+
+    def test_details_of_games_page(self):
+        """Test details of games page"""
 
         result = self.client.get('/top_twenty_games')
         self.assertIn(b"top twenty games", result.data)
@@ -44,7 +51,7 @@ class FlaskTestsBasic(unittest.TestCase):
 
 class EmployeeTestsDatabase(unittest.TestCase):
     """Flask tests that use the database."""
-def setUp(self):
+    def setUp(self):
         """Stuff to do before every test."""
 
         # Get the Flask test client
@@ -52,25 +59,29 @@ def setUp(self):
         app.config['TESTING'] = True
 
         # Connect to test database
-        connect_to_db(app, "postgresql:///testdb")
+        connect_to_db(app, db_uri="postgresql:///testdb")
 
         # Create tables and add sample data
         db.create_all()
         example_data()
 
-def test_employee_register(self):
-    """can employee register?"""
 
-    employee_info = {'employee_id': "102", 'fname': "Walt", 'lname': "Disney", 'email': "walt@gmail.com", 'password':"password"}
-    result = self.client.post("/register", data=employee_info, follow_redirects=True)
-    self.assertIn(b"Walt Disney", result.data)
+    def tearDown(self):
+        """Do at end of every test."""
+
+        db.session.close()
+        db.drop_all()
 
 
-def tearDown(self):
-    """Do at end of every test."""
+    def test_employee_register(self):
+        """can employee register?"""
 
-    db.session.close()
-    db.drop_all()
+        employee_info = {'employee_id': "111", 'fname': "Leonard", 'lname': "Asby", 'email': "leonard@gmail.com", 'password':"test", "confirm_password": "test"}
+        result = self.client.post("/register", data=employee_info, follow_redirects=True)
+        self.assertIn(b"already registered", result.data)
+
+
+
 
 
 if __name__ == "__main__":

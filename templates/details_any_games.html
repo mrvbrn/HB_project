@@ -24,8 +24,13 @@
        <button type="submit" id="log-out-button">Log Out</button>
    </form>
 </div>
+<div>
+    <form action="/employees/{{employee.employee_id}}", method='GET'>
+       <button type="submit" id="previous-button">previous page</button>
+   </form>
+</div>
 <h2>search details of  games</h2>
-<form id="select_form" method="POST">
+<form id="select_form" method="POST" >
   <div class="form_group">
   	  <label>Store</label>
     <select id="store_type_field" name="store_type" class="store_control">
@@ -55,7 +60,7 @@
   </div>
 
   <div class="form_group">
-  	  <button type="submit" id="search-form-button" class="btn btn primary">Search</button>
+  	  <button type="submit" id="search-form-button" class="btn btn primary" data-employeeid = "{{employee.employee_id}}">Search</button>
   </div>
   <br><br>
 </form>
@@ -79,6 +84,7 @@
     <td><span id="price">*</td>
     </tr>
     </table>
+    <p> games rating distrubition</p>
   </div>
    <div style="width: 200px; height: 200px;" class="game-chart">
             <canvas id="chart">
@@ -88,7 +94,8 @@
         </div>
     </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
-<script type="text/javascript">
+
+<script type="text/javascript" >
 $(document).ready(function(){
   $('#log-out-button').on('click', (evt) => {
     evt.preventDefault();
@@ -121,38 +128,47 @@ $(document).ready(function(){
     
 
       $.post(`/details_any_games`, formData, data => {
-        // throw 'break';
-        const histogram = data.all_histogram;
-        const ctx = $(`#chart`).get(0).getContext('2d');
-        const donutChart = new Chart(ctx, {
-          type: 'doughnut',
-          data: {
-            datasets: [{
-              data: Object.values(histogram),
-              backgroundColor: [
-                "#FF6384",
-                "#36A2EB",
-                "#FFCE56",
-                "purple",
-                "yellow"
-              ],
-              "hoverBackgroundColor": [
-                "#FF6384",
-                 "#36A2EB",
-                 "#FFCE56",
-                 "purple",
-                 "yellow"
-              ],
-            }],
-            labels: Object.keys(histogram),
-          },
-          options: { 
-            responsive: true,
-            // maintainAspectRatio: false
-          }
-      });
+        if (data === "No data for this country"){
+          window.alert("No data for this country");
+        } else if(data ==="app id doesn't match"){
+          window.alert("App id doesn't match with store");
+        } else if(data ==="You've exceeded the rate limit for the API you're trying to access"){
+          window.alert("You've exceeded the rate limit for the API you're trying to access")
+        }
+        else {
+          console.log('rating')
+          const histogram = data.all_histogram;
+          const ctx = $(`#chart`).get(0).getContext('2d');
+          const donutChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+              datasets: [{
+                data: Object.values(histogram),
+                backgroundColor: [
+                  "#FF6384",
+                  "#36A2EB",
+                  "#FFCE56",
+                  "purple",
+                  "yellow"
+                ],
+                "hoverBackgroundColor": [
+                  "#FF6384",
+                   "#36A2EB",
+                   "#FFCE56",
+                   "purple",
+                   "yellow"
+                ],
+              }],
+              labels: Object.keys(histogram),
+            },
+            options: { 
+              responsive: true,
+              // maintainAspectRatio: false
+            }
+        });
+      }
               
-      $(`#legend`).html(donutChart.generateLegend());
+      // $(`#legend`).html(donutChart.generateLegend());
                 
               
            

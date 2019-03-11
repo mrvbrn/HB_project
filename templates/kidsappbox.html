@@ -5,6 +5,11 @@
        <button type="submit" id="log-out-button">Log Out</button>
    </form>
 </div>
+<div>
+    <form action="/employees/{{employee.employee_id}}", method='GET'>
+       <button type="submit" id="previous-button">previous page</button>
+   </form>
+</div>
 
 {% for game in games %}
 
@@ -13,7 +18,7 @@
         <div class="game-info">
             <h4 id="game_name" name="game_name">{{ game.game_name }}</h4> 
             <p>{{ game.store }}</p>
-            <img src="{{ game.image }}"" height="112" width="112" class="image">
+            <img src="{{ game.image }}"" height="200" width="200" class="image">
         </div>
         <div class="game-search">
             <form
@@ -23,10 +28,10 @@
                 data-gameid="{{ game.game_id }}"
             >
        
-                <button type="submit" class="btn btn primary">See Games Rating</button>
+                <button type="submit" class="btn btn primary">See Games Rating Distribution</button>
             </form>
         </div>
-        <div style="width: 200px; height: 200px;" class="game-chart">
+        <div style="width: 300px; height: 300px;" class="game-chart">
             <canvas id="chart-{{ game.game_id }}">
                 
             </canvas>
@@ -55,8 +60,11 @@
 
         $.get(`/game-data/${gameId}`, data => {
             if (data === 'No data for this game') {
-                $(`#legend-${gameId}`).append('No data');
-            } else {
+                $(`#legend-${gameId}`).append('No data for this game');
+            } else if(data ==="You've exceeded the rate limit for the API you're trying to access"){
+               window.alert("You've exceeded the rate limit for the API you're trying to access")
+            }
+            else {
                 const ctx = $(`#chart-${gameId}`).get(0).getContext('2d');
                 const donutChart = new Chart(ctx, {
                     type: 'doughnut',
