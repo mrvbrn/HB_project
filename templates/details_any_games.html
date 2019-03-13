@@ -84,7 +84,7 @@
     <td><span id="price">*</td>
     </tr>
     </table>
-    <p> games rating distrubition</p>
+    <p style="display: none"> games rating distrubition</p>
   </div>
    <div style="width: 200px; height: 200px;" class="game-chart">
             <canvas id="chart">
@@ -106,6 +106,7 @@ $(document).ready(function(){
  
   $("#search-form-button").on('click', (evt) => {
       evt.preventDefault();
+      $("p").show("slow");
       searchGames();
       searchRating();
        });
@@ -136,7 +137,6 @@ $(document).ready(function(){
           window.alert("You've exceeded the rate limit for the API you're trying to access")
         }
         else {
-          console.log('rating')
           const histogram = data.all_histogram;
           const ctx = $(`#chart`).get(0).getContext('2d');
           const donutChart = new Chart(ctx, {
@@ -179,6 +179,7 @@ $(document).ready(function(){
   $('#app_name').html(json_record["app_name"]);
   $('#price').html(json_record["price"]);
   $('#genre').html(json_record["genre"]);
+  $('#rating').html(json_record["all_rating"]);
 }
 
 

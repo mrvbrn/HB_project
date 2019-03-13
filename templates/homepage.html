@@ -1,18 +1,111 @@
 {% extends 'base.html' %}
 
 {% block content %}
+       
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button"
+                class="navbar-toggle collapsed"
+                data-toggle="collapse"
+                data-target="#navbar"
+                aria-expanded="false"
+                aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
 
-<h1>KidsAppBox Intelligence Tool</h1>
-<h1>App Analitics</h1>
+        <div class="navbar-brand">
+           <img src="http://kidsappbox.com/wp-content/uploads/bfi_thumb/logo-32w5si2y5537lerlv8hssq@2x.png">    
+        </div>
+      </div>
+      <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="/register">Sign Up</a></li>
+        </ul>
+      </div>
+    </div>
+</nav>
+<div class="row">
+      <section class="splash-header col-xs-12 col-sm-12 col-md-6 col-lg-6 left">
+        <br><br>
+        <p><b>Intelligence Tool & App Analitics<b></p>
+      </section>
+    <form action="/login"
+    class="login-form" method ="POST">
+        <input id="email_type" type="text" name="email_info" placeholder="Your Email"required><br>
+        <input id="password_type" type="password" name="password_info" placeholder="Your password" required><br>
+        <p class="btn" type="submit" value="Log In">Log in</p>
+    </form>
+</div>
+<br><br><br><br>
 
-    <ul>
-        <li>Top Apps By Country</li>
-        <li>See App Details</li>
-        <li>See Your KidsAppBox's Game By Country</li>
-    </ul>
+    <div class="row">
+            <div class="col-sm-4"id="col-1">
+                <div class="widget-icon pic">
+                   <img src="http://kidsappbox.com/wp-content/uploads/bfi_thumb/icon_snake_retina-32w1trs35396wr5gsk6tqi@2x.png" width="70" height="70">
+                </div>
+                    <div class="cws-widget-content benefits_widget">
+                      <h3 class="widget-title"><b>Top Apps By Country<b></h3>         
+                      <section class="text_part">You can see trending apps in each country.</section>
+                    </div>
+            </div>       
+            <div class="col-sm-4" id="col-2">
+                <div class="widget-icon pic">
+                    <img src="http://kidsappbox.com/wp-content/uploads/bfi_thumb/icon_horse_retina-32w1trs35396wr5gsk6tqi@2x.png" width="70" height="70">
+                </div>
+                    <div class="cws-widget-content benefits_widget">
+                       <h3 class="widget-title"><b>See App Details<b></h3>         
+                   <section class="text_part">You can see many details about any app you want.</section>
+                    </div>
+            </div>  
+            <div class="col-sm-4" id="col-3">
+                <div class="widget-icon pic">
+                    <img src="http://kidsappbox.com/wp-content/uploads/bfi_thumb/icon_abc_retina-32w1trs35396wr5gsk6tqi@2x.png" width="70" height="70">
+                </div>
+                    <div class="cws-widget-content benefits_widget">
+                       <h3 class="widget-title"><b>See Your KidsAppBox's Game By Country<b></h3>         
+                  <section class="text_part">You can see how Kidsappbox games perform in US market.</section>
+                   </div>
+            </div>
+    </div> 
+    <script>
+    $('.btn').on('click', (e) => {
+        e.preventDefault();
+        const  email = $('#email_type').val();
+        const  password = $('#password_type').val();
+        data = {email_info: email, 
+            password_info: password}
+        
+        $.post('/login.json', data, (data) => {
+            if (email !== data['confirm_email']){
+                // console.log("no employee");
+                window.alert("no such employee");
+                window.location.href = "/register"
+                
+            }
+            else if (password !== data['confirm_password']){
+                // console.log("no password");
+                window.alert("incorrect password");
+                
+            }
+            else {
+                window.location.href = "/login_employee/" + data["employee_ids"]
+   
+            }
+        });
+    });
+</script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="static/homepage.css">
 
 
-<button><a href='/login'>Login</a></button>
-<button><a href='/register'>Sign Up</a></button>
+
+
+
 
 {% endblock %}

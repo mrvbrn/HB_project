@@ -1,44 +1,60 @@
 {% extends 'base.html' %}
 {% block content %}
-<div>
-    <form action="/", method='GET'>
-       <button type="submit" id="log-out-button">Log Out</button>
-   </form>
-</div>
-<div>
-    <form action="/employees/{{employee.employee_id}}", method='GET'>
-       <button type="submit" id="previous-button">previous page</button>
-   </form>
-</div>
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button"
+                class="navbar-toggle collapsed"
+                data-toggle="collapse"
+                data-target="#navbar"
+                aria-expanded="false"
+                aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+
+        <div class="navbar-brand">
+           <img src="http://kidsappbox.com/wp-content/uploads/bfi_thumb/logo-32w5si2y5537lerlv8hssq@2x.png" width="278" height="47">    
+        </div>
+      </div>
+      <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="/logout">Log Out</a></li>
+          <li><a href="/employees/{{employee.employee_id}}">Previous Page</a></li>
+        </ul>
+      </div>
+    </div>
+</nav>
 
 {% for game in games %}
-
-
-    <div class="game">
-        <div class="game-info">
-            <h4 id="game_name" name="game_name">{{ game.game_name }}</h4> 
-            <p>{{ game.store }}</p>
-            <img src="{{ game.image }}"" height="200" width="200" class="image">
-        </div>
-        <div class="game-search">
-            <form
+      <div class="game">
+            <div class="game-info col-sm-6" id="col-1">
+              <h3 id="game_name" name="game_name">{{ game.game_name }}</h3> 
+                <div class="widget-icon pic">
+                   <img src="{{ game.image }}" height="200" width="200" class="image">
+                </div>
+            </div>        
+            <div class="col-sm-6" id="col-2">
+                <div class="game-search cws-widget-content benefits_widget">
+              <form
                 class="game-search-form"
                 action="/employees/{{employee.employee_id}}/kidsappbox_game"
                 method="GET"
                 data-gameid="{{ game.game_id }}"
-            >
-       
-                <button type="submit" class="btn btn primary">See Games Rating Distribution</button>
-            </form>
-        </div>
-        <div style="width: 300px; height: 300px;" class="game-chart">
+               >
+                <br>
+                <button type="submit" class="rating-button btn btn-info">See Games Rating Distribution</button>
+              </form>
+            </div>
+        <div style="width: 250px; height: 250px;" class="game-chart">
             <canvas id="chart-{{ game.game_id }}">
                 
             </canvas>
             <div id="legend-{{ game.game_id }}"></div>
         </div>
-    </div>
-    
+      </div>
 {% endfor %}
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
   <script>
@@ -77,6 +93,7 @@
     });
  
   </script>
+  <link rel="stylesheet" href="/static/kidsappbox.css"> 
 {% endblock %}
 
 

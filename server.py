@@ -212,7 +212,7 @@ def top_games_process(employee_id):
                 if game_dict['app_id'] not in games_seen:
                     games.append(game_dict)                      # remove repetetion     
                     games_seen.add(game_dict['app_id'])
-                    game = sorted(games, key=lambda i: i['rank'])[:20]   # sorted by rank
+                    game = sorted(games, key=lambda i: i['rank'])[:20]  # sorted by rank
                 
            
             except KeyError:
@@ -287,9 +287,9 @@ def kidsappbox_process(game_id):
                             "backgroundColor": [
                                 "#FF6384",
                                 "#36A2EB",
-                                "#FFCE56",
-                                "purple",
-                                "yellow"
+                                "#e600ac",
+                                "#ff751a",
+                                "rgb(255, 196, 37)"
                             ],
                             "hoverBackgroundColor": [
                                 "#FF6384",

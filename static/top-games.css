@@ -1,0 +1,111 @@
+table tr {
+    counter-increment: rowNumber;
+}
+
+table tr td:first-child::before {
+    content: counter(rowNumber);
+    min-width: 1em;
+    margin-right: 0.5em;
+}
+body {
+  padding-top: 20px;
+  font: 12px sans-serif;
+  font-weight: bold;
+}
+
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+  counter-reset: rowNumber;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+th{
+  height: 50px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+
+
+h3 {
+    font-family: 'Sniglet', cursive;;
+    color: #663300;
+    font-size: 20px;
+    line-height: 1.375;
+    text-align: center;
+}
+
+h1{
+    font-family: 'Sniglet', cursive;
+    color: #663300;
+    font-size: 50px;
+    line-height: 1.375;
+}
+h2{ font-family: 'Sniglet', cursive;;
+    color: #663300;
+    font-size: 50px;
+    line-height: 1.375;}
+
+}
+html, body {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  background-color :#26bcd7;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  color: #000;
+  line-height: 1.3;
+  -webkit-font-smoothing: antialiased;
+}
+
+
+p {
+  text-align: center;
+  font-family: 'Sniglet', cursive;
+  font-weight: 100;
+  font-size: 3rem;
+  color: #996633;
+}
+
+main {
+  margin-top: 10rem;
+}
+
+
+
+section{
+    font-family: Lobster Two;
+    color: #996633;
+    font-size: 18px;
+    line-height: 1.375;
+    text-align: center;
+
+}
+
+.navbar {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-family: 'Sniglet', cursive;
+}
+
+.navbar-default .navbar-brand, .navbar-default .navbar-nav li a {
+  color: #fff;
+  font-family: 'Sniglet', cursive;;
+
+}
+
+.navbar-default .navbar-brand:hover, .navbar-default .navbar-nav li a:hover {
+  color: #ED8429;
+}

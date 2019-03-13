@@ -1,24 +1,56 @@
 {% extends 'base.html' %}
 {% block content %}
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button"
+                class="navbar-toggle collapsed"
+                data-toggle="collapse"
+                data-target="#navbar"
+                aria-expanded="false"
+                aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
 
-<div>
-    <form action="/", method='GET'>
-       <button type="submit" id="log-out-button">Log Out</button>
-   </form>
-</div>
-
-
+        <div class="navbar-brand">
+           <img src="http://kidsappbox.com/wp-content/uploads/bfi_thumb/logo-32w5si2y5537lerlv8hssq@2x.png" width="278" height="47">    
+        </div>
+      </div>
+         <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href='/logout'>Logout</a></li>
+        </ul>
+      </div>
+    </nav>
+    <br><br><br><br><br><br>
     <h1>Welcome {{employee.fname}}!</h1>
     <h2>What do you want to do?</h2><br><br>
+   
+        <div class="col-sm-4"id="col-1">
+            <div class="widget-icon pic">         
+            </div>
+                <div class="cws-widget-content benefits_widget">
+                     <p><a href="/employees/{{employee.employee_id}}/top_twenty_games"> <img src="http://kidsappbox.com/wp-content/uploads/bfi_thumb/icon_snake_retina-32w1trs35396wr5gsk6tqi@2x.png" width="70" height="70"></a>Search top twenty games</p>
+                </div>
+        </div>  
+        <div class="col-sm-4"id="col-1">
+            <div class="widget-icon pic">         
+            </div>
+                <div class="cws-widget-content benefits_widget">
+                     <p><a href="/employees/{{employee.employee_id}}/details_any_games"> <img src="http://kidsappbox.com/wp-content/uploads/bfi_thumb/icon_horse_retina-32w1trs35396wr5gsk6tqi@2x.png" width="70" height="70"></a>See details of any games</p>
+                </div>
+        </div> 
+         <div class="col-sm-4"id="col-1">
+            <div class="widget-icon pic">         
+            </div>
+                <div class="cws-widget-content benefits_widget">
+                     <p><a href="/employees/{{employee.employee_id}}/kidsappbox_game"> <img src="http://kidsappbox.com/wp-content/uploads/bfi_thumb/icon_abc_retina-32w1trs35396wr5gsk6tqi@2x.png" width="70" height="70"></a>See details of your KidsAppBox's game</p>
+                </div>
+        </div>    
 
-<!-- <h2>Search top twenty games:</h2> -->
-   <p><a href="/employees/{{employee.employee_id}}/top_twenty_games">Search top twenty games</a></p>
-
-<!-- <h2>See details of any games</h2> -->
-   <p><a href="/employees/{{employee.employee_id}}/details_any_games">See details of any games</a></p>
-
-<!-- <h2>See details of your KidsAppBox's game</h2> -->
-   <p><a href="/employees/{{employee.employee_id}}/kidsappbox_game"">See details of your KidsAppBox's game</a></p>
 <script>
     $(document).ready(function(){
       $('#log-out-button').on('click', (evt) => {
@@ -28,4 +60,5 @@
     });
   });
 </script>
+<link rel="stylesheet" href="../static/employee.css">
 {% endblock %}
