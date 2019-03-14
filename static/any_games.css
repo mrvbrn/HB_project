@@ -7,17 +7,14 @@ table tr td:first-child::before {
     min-width: 1em;
     margin-right: 0.5em;
 }
-body {
-  padding-top: 20px;
-  font: 12px sans-serif;
-  font-weight: bold;
-}
+
 
 table {
-  font-family: arial, sans-serif;
+  font-family: 'Sniglet', cursive;
   border-collapse: collapse;
   width: 100%;
   counter-reset: rowNumber;
+
 }
 
 td, th {
@@ -32,31 +29,41 @@ th{
 tr:nth-child(even) {
   background-color: #dddddd;
 }
-#data_type_field, .form-group{
+#search-form-button {
   margin-left: 16px; 
   border: none;
   color: black;
   font-size: 16px;
   font-family: 'Sniglet', cursive;
- 
+}
+label {
+  text-align: center;
+  font-family: 'Sniglet', cursive;
+  color: black;
+
+} 
+.game-chart {
+  width: 240px;
+  height:240px;
+  
+  
+  margin: 0px auto;
+  text-align: center;
 }
 
-h3 {
-    font-family: 'Sniglet', cursive;;
-    color: black;
-    font-size: 20px;
-    line-height: 1.375;
-    margin-left: 16px;
-    text-align: left;
+#chart {
+  width: 50px;
+  height: 100px;
+  
 }
 
-h2{ font-family: 'Sniglet', cursive;
-    color: #663300;
-    font-size: 50px;
-    line-height: 1.375;
-}
+h2{ 
+  font-family: 'Sniglet', cursive;
+  color: #663300;
+  font-size: 50px;
+  line-height: 1.375;
+  }
 
-}
 html, body {
   width: 100%;
   height: 100%;
@@ -70,6 +77,9 @@ body {
   color: #000;
   line-height: 1.3;
   -webkit-font-smoothing: antialiased;
+  padding-top: 20px;
+  font: 12px sans-serif;
+  font-weight: bold;
 }
 
 
@@ -78,7 +88,7 @@ p {
   font-family: 'Sniglet', cursive;
   font-weight: 100;
   font-size: 3rem;
-  color: #996633;
+  color: black;
 }
 
 main {

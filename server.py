@@ -138,10 +138,10 @@ def register_process():
 
 
 
-            return redirect("/login")
+            return redirect("/")
         elif employee_update and employee_update.fname != None:
             flash(f" You are  already registered.")
-            return redirect("/login")
+            return redirect("/")
 
         else:
             flash(f" You are not employee.")
@@ -213,7 +213,7 @@ def top_games_process(employee_id):
                     games.append(game_dict)                      # remove repetetion     
                     games_seen.add(game_dict['app_id'])
                     game = sorted(games, key=lambda i: i['rank'])[:20]  # sorted by rank
-                
+                    print(game)
            
             except KeyError:
                 game = 'No Data'
@@ -385,7 +385,7 @@ def show_details():
 
 
 if __name__ == "__main__":
-    app.debug = True
+    app.debug = False
     app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = True
     connect_to_db(app)
     DebugToolbarExtension(app)

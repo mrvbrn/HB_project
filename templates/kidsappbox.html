@@ -15,8 +15,8 @@
             <span class="icon-bar"></span>
         </button>
 
-        <div class="navbar-brand">
-           <img src="http://kidsappbox.com/wp-content/uploads/bfi_thumb/logo-32w5si2y5537lerlv8hssq@2x.png" width="278" height="47">    
+         <div class="navbar-brand">
+           <a href="/"><img src="http://kidsappbox.com/wp-content/uploads/bfi_thumb/logo-32w5si2y5537lerlv8hssq@2x.png" width="278" height="47"></a>    
         </div>
       </div>
       <div id="navbar" class="navbar-collapse collapse">
@@ -31,11 +31,12 @@
 {% for game in games %}
       <div class="game">
             <div class="game-info col-sm-6" id="col-1">
-              <h3 id="game_name" name="game_name">{{ game.game_name }}</h3> 
+              <h3 id="game_name" name="game_name">{{ game.game_name }} ({{game.store}})</h3> 
                 <div class="widget-icon pic">
                    <img src="{{ game.image }}" height="200" width="200" class="image">
                 </div>
-            </div>        
+            </div>
+
             <div class="col-sm-6" id="col-2">
                 <div class="game-search cws-widget-content benefits_widget">
               <form
@@ -87,7 +88,6 @@
                     data: data,
                     options: { responsive: true}
                 });
-                // $(`#legend-${gameId}`).html(donutChart.generateLegend());
             }
         });
     });

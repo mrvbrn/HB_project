@@ -1,0 +1,47 @@
+h2{ font-family: 'Sniglet', cursive;;
+    color: #663300;
+    font-size: 50px;
+    line-height: 1.375;}
+
+h3{ font-family: 'Sniglet', cursive;;
+    color: black;
+    font-size: 15px;
+    line-height: 1.375;
+
+}
+
+}
+html, body {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  background-color :#26bcd7;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  color: #000;
+  line-height: 1.3;
+  -webkit-font-smoothing: antialiased;
+  padding-top: 20px;
+  font: 12px sans-serif;
+  font-weight: bold;
+}
+
+
+
+main {
+  margin-top: 10rem;
+}
+
+
+
+section{
+    font-family: Lobster Two;
+    color: #996633;
+    font-size: 18px;
+    line-height: 1.375;
+    text-align: center;
+
+}

@@ -1,10 +1,19 @@
 {% extends 'base.html' %}
 {% block content %}
 
+        <div class="navbar-brand">
+           <a href="/"><img src="http://kidsappbox.com/wp-content/uploads/bfi_thumb/logo-32w5si2y5537lerlv8hssq@2x.png" width="278" height="47"></a>    
+        </div>
+        <br><br><br>
+    
+<h2>details of  games</h2>
+
 
  {% for r in json_record %}
 
-<p>{{r['description'] | safe}}</p>
+<h3>{{r['description'] | safe}}</h3>
+
+<link rel="stylesheet" href="/static/detail_games.css">
 
  {% endfor %}
 
