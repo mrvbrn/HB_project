@@ -131,9 +131,8 @@ def register_process():
             employee_update.password = password
             """create new employee"""
 
-            new_employee = Employee(employee_id= employee_id, fname=fname, lname=lname, email=email, password=password)
             flash(f" Employee {fname} {lname} added.")
-            db.session.add(new_employee)
+          
             db.session.commit()
 
 
@@ -213,7 +212,7 @@ def top_games_process(employee_id):
                     games.append(game_dict)                      # remove repetetion     
                     games_seen.add(game_dict['app_id'])
                     game = sorted(games, key=lambda i: i['rank'])[:20]  # sorted by rank
-                    print(game)
+                
            
             except KeyError:
                 game = 'No Data'
@@ -292,9 +291,9 @@ def kidsappbox_process(game_id):
                                 "rgb(255, 196, 37)"
                             ],
                             "hoverBackgroundColor": [
-                                "#FF6384",
-                                "#36A2EB",
-                                "#FFCE56",
+                                "#1affa3",
+                                "#0066ff",
+                                "#ff4d4d",
                                 "purple",
                                 "yellow"
                             ]

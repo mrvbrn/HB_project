@@ -33,7 +33,6 @@ tr:nth-child(even) {
   background-color: #dddddd;
 }
 #data_type_field, .form-group{
-  margin-left: 16px; 
   border: none;
   color: black;
   font-size: 16px;
