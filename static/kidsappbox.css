@@ -27,10 +27,14 @@ h2{
     font-size: 10px;
     line-height: 1.375;
     text-align: center;
-    display: flex;
-    align-items: center;
     justify-content: center;
 
+}
+.rating-button{
+  background-color: rgb(255, 196, 37)
+}
+canvas {
+  margin-top: 40px;
 }
 
 .image {

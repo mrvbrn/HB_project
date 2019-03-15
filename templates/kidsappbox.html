@@ -30,30 +30,28 @@
 
 {% for game in games %}
       <div class="game">
-            <div class="game-info col-sm-6" id="col-1">
+        <div class="game-info col-sm-6" id="col-1">
               <h3 id="game_name" name="game_name">{{ game.game_name }} ({{game.store}})</h3> 
                 <div class="widget-icon pic">
                    <img src="{{ game.image }}" height="200" width="200" class="image">
                 </div>
-            </div>
-
-            <div class="col-sm-6" id="col-2">
-                <div class="game-search cws-widget-content benefits_widget">
+        </div>
+        <div style="width: 250px; height: 250px;" class="col-sm-6 game-chart">
+                <canvas id="chart-{{ game.game_id }}"></canvas>
+        </div>
+            <div id="legend-{{ game.game_id }}"></div>
+      </div>
+      <div class="game">
+        <div class="game-info col-md-10 col-md-offset-2">
               <form
                 class="game-search-form"
                 action="/employees/{{employee.employee_id}}/kidsappbox_game"
                 method="GET"
                 data-gameid="{{ game.game_id }}"
                >
-                <br>
+               <br>
                 <button type="submit" class="rating-button btn btn-info">See Games Rating Distribution</button>
               </form>
-            </div>
-        <div style="width: 250px; height: 250px;" class="game-chart">
-            <canvas id="chart-{{ game.game_id }}">
-                
-            </canvas>
-            <div id="legend-{{ game.game_id }}"></div>
         </div>
       </div>
 {% endfor %}
