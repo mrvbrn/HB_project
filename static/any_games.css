@@ -29,8 +29,7 @@ th{
 tr:nth-child(even) {
   background-color: #dddddd;
 }
-#search-form-button {
-  margin-left: 16px; 
+#search-form-button, .form-group {
   border: none;
   color: black;
   font-size: 16px;
@@ -45,16 +44,8 @@ label {
 .game-chart {
   width: 240px;
   height:240px;
-  
-  
   margin: 0px auto;
   text-align: center;
-}
-
-#chart {
-  width: 50px;
-  height: 100px;
-  
 }
 
 h2{ 
@@ -95,16 +86,6 @@ main {
   margin-top: 10rem;
 }
 
-
-
-section{
-    font-family: Lobster Two;
-    color: #996633;
-    font-size: 18px;
-    line-height: 1.375;
-    text-align: center;
-
-}
 
 .navbar {
   background: transparent;

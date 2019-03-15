@@ -34,14 +34,14 @@
 <form action="/employees/{{employee.employee_id}}/top_twenty_games" method ="POST" id = "search_game">
   <div class="form-row">
      
-      <div class="form-group col-md-4">
+      <div class="form-group col-md-3">
              <select class="form-control" id="store_type_field" name="store_type">
                 <option selected>Store</option>
                 <option value="android">android</option>
                 <option value="itunes">itunes</option>
              </select>
       </div>
-      <div class="form-group col-md-4">
+      <div class="form-group col-md-3">
              <select class="form-control" id="country_type_field" name="country_type" >
                  <option selected>Country</option>
                  <option value="AU" id = "select_country">Australia</option>
@@ -55,10 +55,10 @@
      </div>
   </div>
    <div class="form-row">
-     <div class="form-group col-md-4">
+     <div class="form-group col-md-3">
          <input type="date" class="form-control" name="date_type" required id="data_type_field">
      </div>
-    <div class="form-group col-md-4">
+    <div class="form-group col-md-3">
       <button type="submit" id="search" class="btn btn-outline-warning">Search</button>
     </div>
   </div>

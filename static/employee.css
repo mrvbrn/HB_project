@@ -46,12 +46,12 @@ main {
   background: transparent;
   border: none;
   color: #fff;
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Sniglet', cursive;
 }
 
 .navbar-default .navbar-brand, .navbar-default .navbar-nav li a {
   color: #fff;
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Sniglet', cursive;;
 
 }
 
