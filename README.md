@@ -21,7 +21,7 @@
 
 ### Features
 
-![Screen%20Shot%202019-04-15%20at%209.52.59%20PM.png](/static/img/homepage.png)
+![Screen%20Shot%202019-04-15%20at%209.52.59%20PM.png](static/img/homepage.png)
 
 #### For each countries that KidsAppBox markets its games it is possible to see the trending apps with this feature. KidsAppBox employees can see Top 20 apps by country. There is also a link for each of these 20 apps which forwards the traffic to the App Details page once a user clicks it.
 
@@ -46,10 +46,8 @@
 #### Get an Api from [AppMonstra](https://appmonsta.com/dashboard/api-documentation/?python#introduction) and save it to a file called `secrets.sh`:
 
 `export USERNAME='YOUR_API_KEY'
-export PASSWORD='X'` 
 
-`export USERNAME='YOUR_API_KEY'
- export PASSWORD='X'`
+ export PASSWORD='X'` 
 
 #### Create a virtual environment:
 
@@ -67,11 +65,13 @@ export PASSWORD='X'`
 #### Build database tables and seed file:
 
 `$ python3 model.py
+
  $ python3 seed.py `
 
 #### Be sure your virtual environment and secrests.sh file are activated:
 
 `$ source virtual env/bin/activate
+
  $ source secrets.sh`
 
 #### Run the app via command line:
@@ -81,8 +81,3 @@ export PASSWORD='X'`
 #### Open your browser and navigate to:
 
 `http://localhost:5000/`
-
-
-```python
-
-```
