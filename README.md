@@ -46,9 +46,7 @@
 #### Get an Api from [AppMonstra](https://appmonsta.com/dashboard/api-documentation/?python#introduction) and save it to a file called `secrets.sh`:
 
 `export USERNAME='YOUR_API_KEY'
-
  export PASSWORD='X'` 
-
 #### Create a virtual environment:
 
 `$ virtualenv env`
