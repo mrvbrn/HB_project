@@ -65,13 +65,11 @@
 #### Build database tables and seed file:
 
 `$ python3 model.py
-
  $ python3 seed.py `
 
 #### Be sure your virtual environment and secrests.sh file are activated:
 
 `$ source virtual env/bin/activate
-
  $ source secrets.sh`
 
 #### Run the app via command line:
