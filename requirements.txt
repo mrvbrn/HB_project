@@ -9,7 +9,7 @@ Flask-SQLAlchemy==2.3.2
 get==2018.11.19
 idna==2.8
 itsdangerous==1.1.0
-Jinja2==2.10
+Jinja2==2.11.3
 MarkupSafe==1.1.0
 pkg-resources==0.0.0
 post==2018.11.20
